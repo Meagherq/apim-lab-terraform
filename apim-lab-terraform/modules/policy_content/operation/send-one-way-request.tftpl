@@ -1,0 +1,49 @@
+<policies>
+    <inbound>
+        <base />
+        <set-query-parameter name="x-product-name" exists-action="override">
+            <value>@(context.Product?.Name ?? "none")</value>
+        </set-query-parameter>
+        <set-header name="x-request-context-data" exists-action="override">
+            <value>@(context.Deployment.Region)</value>
+        </set-header>
+        <set-header name="x-request-received-time" exists-action="override">
+            <value>{{TimeNow}}</value>
+        </set-header>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+        <xml-to-json kind="direct" apply="always" consider-accept-header="false" />
+        <set-header name="x-aspnet-version" exists-action="delete" />
+        <set-header name="x-powered-by" exists-action="delete" />
+        <choose>
+            <when condition="@(context.Response.StatusCode == 200)">
+                <send-one-way-request mode="new">
+                    <set-url>${webhook_url}</set-url>
+                    <set-method>POST</set-method>
+                    <set-body>@{
+        return new JObject(
+            new JProperty("@type","MessageCard"),
+            new JProperty("@context", "http://schema.org/extensions"),
+            new JProperty("summary","Summary"),
+            new JProperty("themeColor", "0075FF"),
+            new JProperty("sections",
+            new JArray (
+                new JObject (
+                new JProperty("text", "Hello!")
+                )
+            )
+            )
+        ).ToString();
+        }</set-body>
+                </send-one-way-request>
+            </when>
+        </choose>
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

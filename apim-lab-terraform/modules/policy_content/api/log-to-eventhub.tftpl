@@ -1,0 +1,24 @@
+<policies>
+    <inbound>
+        <log-to-eventhub logger-id="${LoggerId}">
+        @{
+            return new JObject(
+                new JProperty("EventTime", DateTime.UtcNow.ToString()),
+                new JProperty("ServiceName", context.Deployment.ServiceName),
+                new JProperty("RequestId", context.RequestId),
+                new JProperty("RequestIp", context.Request.IpAddress),
+                new JProperty("OperationName", context.Operation.Name)
+            ).ToString();
+        }
+        </log-to-eventhub>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

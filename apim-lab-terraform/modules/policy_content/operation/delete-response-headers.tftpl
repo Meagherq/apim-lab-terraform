@@ -1,0 +1,18 @@
+<policies>
+    <inbound>
+        <base />
+        <set-header name="Accept-Encoding" exists-action="override">
+            <value>deflate</value>
+        </set-header>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+        <xml-to-json kind="direct" apply="always" consider-accept-header="false" />
+        <set-header name="x-aspnet-version" exists-action="delete" />
+        <set-header name="x-powered-by" exists-action="delete" />
+    </outbound>
+
+</policies>

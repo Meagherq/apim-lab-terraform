@@ -1,0 +1,9 @@
+variable name {}
+variable api_management_name {}
+variable resource_group_name {}
+variable display_name {}
+variable authorization_endpoint {}
+variable client_id {}
+variable client_registration_endpoint {}
+variable grant_types {}
+variable authorization_methods {}
