@@ -37,6 +37,13 @@ stages:
       #     SourceFolder: '$(Pipeline.Workspace)/$(initials)-apim-lab-terraform/drop'
       #     TargetFolder: '$(System.DefaultWorkingDirectory)'
       - script: |
+          dir
+          echo "Base------------"
+          cd $(Pipeline.Workspace)
+          dir
+          echo "Pipe------------"
+          cd $(Pipeline.Workspace/drop)
+          dir
           cd '$(Pipeline.Workspace)/drop/apim-lab-terraform/env/lab)'
           printf 'terraform {  \nbackend "azurerm" {  \nstorage_account_name="lab$(initials)prereqsa" \ncontainer_name="tfstate" \nkey="lab.terraform.tfstate" \nresource_group_name="lab-$(intiails)-prereq-rg" \n}\n}' >> backend.tf
         displayName: 'Setup Backend Config'
