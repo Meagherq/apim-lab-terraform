@@ -39,13 +39,6 @@ stages:
       #     SourceFolder: '$(Pipeline.Workspace)/$(initials)-apim-lab-terraform/drop'
       #     TargetFolder: '$(System.DefaultWorkingDirectory)'
       - script: |
-          dir
-          echo "Base------------"
-          cd $(Pipeline.Workspace)
-          dir
-          echo "Pipe------------"
-          cd $(Pipeline.Workspace/drop)
-          dir
           cd '$(Pipeline.Workspace)/drop/apim-lab-terraform/env/lab)'
           printf 'terraform {  \nbackend "azurerm" {  \nstorage_account_name="lab$(initials)prereqsa" \ncontainer_name="tfstate" \nkey="lab.terraform.tfstate" \nresource_group_name="lab-$(initials)-prereq-rg" \n}\n}' >> backend.tf
         displayName: 'Setup Backend Config'
@@ -88,7 +81,7 @@ stages:
         timeoutInMinutes: 1440 # task times out in 1 day
         inputs:
           notifyUsers: |
-            admin@MngEnvMCAP884881.onmicrosoft.com
+            $(adminEmail)
           instructions: 'Please validate the build configuration and resume' 
           onTimeout: 'reject'
     - job: Deploy
