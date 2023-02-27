@@ -37,7 +37,7 @@ stages:
       #     SourceFolder: '$(Pipeline.Workspace)/$(initials)-apim-lab-terraform/drop'
       #     TargetFolder: '$(System.DefaultWorkingDirectory)'
       - script: |
-          cd '$(Pipeline.Workspace)/_apim-lab-terraform-github/drop/apim-lab-terraform/env/lab)'
+          cd '$(Pipeline.Workspace)/drop/apim-lab-terraform/env/lab)'
           printf 'terraform {  \nbackend "azurerm" {  \nstorage_account_name="lab$(initials)prereqsa" \ncontainer_name="tfstate" \nkey="lab.terraform.tfstate" \nresource_group_name="lab-$(intiails)-prereq-rg" \n}\n}' >> backend.tf
         displayName: 'Setup Backend Config'
       - task: Docker@1
@@ -46,7 +46,7 @@ stages:
           command: 'Run an image'
           imageName: 'hashicorp/terraform:1.3.8'
           qualifyImageName: false
-          volumes: '$(Pipeline.Workspace)/_apim-lab-terraform-github/drop/apim-lab-terraform:/code'
+          volumes: '$(Pipeline.Workspace)/drop/apim-lab-terraform:/code'
           envVars: |
             ARM_CLIENT_ID=$(terraform-app-id)
             ARM_CLIENT_SECRET=$(terraform-key)
@@ -61,7 +61,7 @@ stages:
           command: 'Run an image'
           imageName: 'hashicorp/terraform:1.3.8'
           qualifyImageName: false
-          volumes: '$(Pipeline.Workspace)/_apim-lab-terraform-github/drop/apim-lab-terraform:/code'
+          volumes: '$(Pipeline.Workspace)/drop/apim-lab-terraform:/code'
           envVars: |
             ARM_CLIENT_ID=$(terraform-app-id)
             ARM_CLIENT_SECRET=$(terraform-key)
@@ -92,7 +92,7 @@ stages:
           command: 'Run an image'
           imageName: 'hashicorp/terraform:1.3.8'
           qualifyImageName: false
-          volumes: '$(Pipeline.Workspace)/_apim-lab-terraform-github/drop/apim-lab-terraform:/code'
+          volumes: '$(Pipeline.Workspace)/drop/apim-lab-terraform:/code'
           envVars: |
             ARM_CLIENT_ID=$(terraform-app-id)
             ARM_CLIENT_SECRET=$(terraform-key)
