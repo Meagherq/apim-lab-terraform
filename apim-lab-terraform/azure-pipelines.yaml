@@ -47,7 +47,7 @@ stages:
           cd $(Pipeline.Workspace/drop)
           dir
           cd '$(Pipeline.Workspace)/drop/apim-lab-terraform/env/lab)'
-          printf 'terraform {  \nbackend "azurerm" {  \nstorage_account_name="lab$(initials)prereqsa" \ncontainer_name="tfstate" \nkey="lab.terraform.tfstate" \nresource_group_name="lab-$(intiails)-prereq-rg" \n}\n}' >> backend.tf
+          printf 'terraform {  \nbackend "azurerm" {  \nstorage_account_name="lab$(initials)prereqsa" \ncontainer_name="tfstate" \nkey="lab.terraform.tfstate" \nresource_group_name="lab-$(initials)-prereq-rg" \n}\n}' >> backend.tf
         displayName: 'Setup Backend Config'
       - task: Docker@1
         displayName: 'Terraform Init'
