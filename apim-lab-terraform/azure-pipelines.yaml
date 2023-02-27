@@ -71,6 +71,7 @@ stages:
           containerCommand: 'plan -no-color'
           runInBackground: false     
     - job: ManualApproval
+      dependsOn: Plan
       pool: 'server'
       displayName:  Lab Deploy Approval
       steps: 
@@ -82,6 +83,7 @@ stages:
           instructions: 'Please validate the build configuration and resume' 
           onTimeout: 'reject'
     - job: Deploy
+      dependsOn: ManualApproval
       displayName:  Lab Deploy 
       steps: 
       - task: Docker@1
