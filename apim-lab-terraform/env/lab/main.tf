@@ -29,6 +29,7 @@ module "apim" {
 
     name = "${var.environment_prefix}-${var.initials}-apim"
     location = module.resource_group.location
+    resource_group_name = module.resource_group.name
     publisher_name = ""
     publisher_email = ""
 }
