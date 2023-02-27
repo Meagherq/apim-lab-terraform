@@ -31,6 +31,8 @@ stages:
     - job: Plan
       displayName:  Lab Plan
       steps:
+      - download: current
+        artifact: drop
       # - task: CopyFiles@2
       #   displayName: 'Copy Files'
       #   inputs:
@@ -93,6 +95,8 @@ stages:
       dependsOn: ManualApproval
       displayName:  Lab Deploy 
       steps: 
+      - download: current
+        artifact: drop
       - task: Docker@1
         displayName: 'Terraform Plan'
         inputs:
