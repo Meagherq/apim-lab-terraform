@@ -1,5 +1,3 @@
-variable name {}
-variable resource_group_name {}
-variable api_management_name {}
-variable display_name {}
-variable value {}
+variable api_management_id {}
+variable policy_filename {}
+variable vars {}

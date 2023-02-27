@@ -30,8 +30,8 @@ module "apim" {
     name = "${var.environment_prefix}-${var.initials}-apim"
     location = module.resource_group.location
     resource_group_name = module.resource_group.name
-    publisher_name = ""
-    publisher_email = ""
+    publisher_name = "Quinn Meagher"
+    publisher_email = "admin@MngEnvMCAP884881.onmicrosoft.com"
 }
 
 module "apim_global_cors_policy" {

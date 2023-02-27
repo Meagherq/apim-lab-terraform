@@ -2,8 +2,8 @@
     <inbound>
         <cors allow-credentials="true">
             <allowed-origins>
-                %{ origin in origins ~}
-                <origin>${origin}</origin>
+                %{ for key, value in origins ~}
+                <origin>${value}</origin>
                 %{ endfor ~}
             </allowed-origins>
             <allowed-methods preflight-result-max-age="300">
