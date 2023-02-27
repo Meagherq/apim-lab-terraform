@@ -28,8 +28,8 @@ stages:
   - stage: LabCD
     displayName: Lab CD
     jobs:
-    - job: Deploy
-      displayName:  Lab Deploy
+    - job: Plan
+      displayName:  Lab Plan
       steps:
       # - task: CopyFiles@2
       #   displayName: 'Copy Files'
@@ -69,7 +69,11 @@ stages:
             ARM_TENANT_ID=$(tenant-id)
           workingDirectory: '/code/env/lab'
           containerCommand: 'plan -no-color'
-          runInBackground: false      
+          runInBackground: false     
+    - job: ManualApproval
+      pool: 'server'
+      displayName:  Lab Deploy Approval
+      steps: 
       - task: ManualValidation@0
         timeoutInMinutes: 1440 # task times out in 1 day
         inputs:
@@ -77,6 +81,9 @@ stages:
             admin@MngEnvMCAP884881.onmicrosoft.com
           instructions: 'Please validate the build configuration and resume' 
           onTimeout: 'reject'
+    - job: Deploy
+      displayName:  Lab Deploy 
+      steps: 
       - task: Docker@1
         displayName: 'Terraform Plan'
         inputs:
