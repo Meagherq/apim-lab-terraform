@@ -55,6 +55,20 @@ First, we need to enable CORS for the domain name of the frontend. To achieve th
 
   ![APIM Policy CORS All APIs](../../assets/images/apim-policy-cors-all-apis-2.png)
 
+### Testing Subscription Keys and Rate Limiting with Terraform
+
+API definitions can also be imported into Terraform using it's Open API specification link and a service url.
+
+- In the root main.tf file, uncomment the code definitions containing the Colors API using a link to it's publicly available Open API specification.
+  
+  Ensure that only the proper section is uncommented using the Lab Section comments. Leave the "Rate Limiting" section commented to add the Colors API without any products.
+
+  ![Terraform APIM Colors API Open API Spec](../../assets/images/tf-module-3-add-colors-api-open-api.png)
+  
+- Execute a Terraform Plan and Terraform Apply with these changes, this will create the Colors API and the associated products.
+
+### Test it in Developer Portal
+
 - After enabling CORS in APIM lets go back to our frontend <https://colors-web.azurewebsites.net> and follow these steps:
 
 - Click on the hamburger menu next to *Colors* in the top left corner.

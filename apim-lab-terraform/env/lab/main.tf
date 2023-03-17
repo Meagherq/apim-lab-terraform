@@ -227,77 +227,98 @@ module "apim_starwars_api_getpeoplebyid" {
     resource_group_name = module.resource_group.name
     display_name = "GetPeopleById"
     method = "GET"
-    url_template = "/people/{id}"
+    url_template = "/people/{id}/"
     description = "Get people by Id"
     status_code = 200
 }
 # END Lab 3 Adding APIs: Section 1 Add API from scratch
 
-# # BEGIN Lab 3 Adding APIs: Section 2 Import API using OpenAPI
-# module "apim_calc_api" {
-#     source = "../../modules/azurerm/api_management_api"
+# BEGIN Lab 3 Adding APIs: Section 2 Import API using OpenAPI
+module "apim_calc_api" {
+    source = "../../modules/azurerm/api_management_api"
 
-#     name = "basic-calculator"
-#     display_name = "Basic Calculator"
-#     description = "Arithmetics is just a call away!"
-#     service_url = "http://calcapi.cloudapp.net"
-#     api_management_name = module.apim.name
-#     resource_group_name = module.resource_group.name
-#     path = "calc"
-#     protocols = ["https, http"]
-#     versionNumber = "v1"
-#     content_format = "swagger-link-json"
-#     content_value = "http://calcapi.cloudapp.net/calcapi.json"
-# }
-# # END Lab 3 Adding APIs: Section 2 Import API using OpenAPI
+    name = "basic-calculator"
+    display_name = "Basic Calculator"
+    description = "Arithmetics is just a call away!"
+    service_url = "http://calcapi.cloudapp.net"
+    api_management_name = module.apim.name
+    resource_group_name = module.resource_group.name
+    path = "calc"
+    protocols = ["https, http"]
+    versionNumber = "v1"
+    content_format = "swagger-link-json"
+    content_value = "http://calcapi.cloudapp.net/calcapi.json"
+}
+# END Lab 3 Adding APIs: Section 2 Import API using OpenAPI
 
-# # BEGIN Lab 3 Adding APIs: Section 3 Calling APIs
-# module "apim_colors_api" {
-#     source = "../../modules/azurerm/api_management_api"
+# BEGIN Lab 3 Adding APIs: Section 3 Calling APIs
+module "apim_colors_api" {
+    source = "../../modules/azurerm/api_management_api"
 
-#     name = "colors-api"
-#     display_name = "Colors API"
-#     description = "Fun with Colors"
-#     service_url = "https://colors-api.azurewebsites.net"
-#     api_management_name = module.apim.name
-#     resource_group_name = module.resource_group.name
-#     path = "color"
-#     protocols = ["https]
-#     versionNumber = "v1"
+    name = "colors-api"
+    display_name = "Colors API"
+    description = "Fun with Colors"
+    service_url = "https://colors-api.azurewebsites.net"
+    api_management_name = module.apim.name
+    resource_group_name = module.resource_group.name
+    path = "color"
+    protocols = ["https"]
+    versionNumber = "v1"
 
-#     content_format = "swagger-link-json"
-#     content_value = "https://colors-api.azurewebsites.net/swagger/v1/swagger.json"
-# }
-# # END Lab 3 Adding APIs: Section 3 Calling APIs
+    content_format = "swagger-link-json"
+    content_value = "https://colors-api.azurewebsites.net/swagger/v1/swagger.json"
+}
 
-# # BEGIN Lab 4 Policy Expressions Section 2 Caching Policy
-# module "apim_calc_api_getrandcolor_policy" {
-#   source = "../../modules/azurerm/api_management_api_operation_policy"
+# BEGIN Lab 3 Adding APIs: Section 3 Calling APIs - Rate Limiting
+module "apim_colors_api_starter_product_assocation" {
+    source = "../../modules/azurerm/api_management_product_api"
 
-#   api_name            = module.apim_calc_api.name
-#   api_management_name = module.apim.name
-#   resource_group_name = module.resource_group.name
-#   operation_id        = "getrandomcolor"
-#
-#   policy_filename     = "cache-lookup"
-#
-# # Lab 4 Policy Expressions Section 3 Transformational Policies - Find and Replace
-# # policy_filename     = "transform-find-and-replace"
-#
-# }
-# # END Lab 4 Policy Expressions Section 2 Caching Policy
+    api_name = module.apim_colors_api.name
+    resource_group_name = module.resource_group.name
+    api_management_name = module.apim.name
+    product_id = "Starter"
+}
 
-# # Lab 4 Policy Expressions Section 3 Transformational Policies - Conditional Transformation
-# module "apim_starwars_api_getpeoplebyid_policy" {
-#   source = "../../modules/azurerm/api_management_api_operation_policy"
+module "apim_colors_api_unlimited_product_assocation" {
+    source = "../../modules/azurerm/api_management_product_api"
 
-#   api_name            = module.apim_starwars_api.name
-#   api_management_name = module.apim.name
-#   resource_group_name = module.resource_group.name
-#   operation_id        = module.apim_starwars_api_getpeoplebyid.operation_id
-#
-#   policy_filename     = "transform-conditional"
-# }
+    api_name = module.apim_colors_api.name
+    resource_group_name = module.resource_group.name
+    api_management_name = module.apim.name
+    product_id = "Unlimited"
+}
+# END Lab 3 Adding APIs: Section 3 Calling APIs - Rate Limiting
+# END Lab 3 Adding APIs: Section 3 Calling APIs
+
+# BEGIN Lab 4 Policy Expressions Section 2 Caching Policy
+module "apim_calc_api_getrandcolor_policy" {
+  source = "../../modules/azurerm/api_management_api_operation_policy"
+
+  api_name            = module.apim_calc_api.name
+  api_management_name = module.apim.name
+  resource_group_name = module.resource_group.name
+  operation_id        = "getrandomcolor"
+
+  # policy_filename     = "cache-lookup"
+
+# BEGIN Lab 4 Policy Expressions Section 3 Transformational Policies - Find and Replace
+  policy_filename     = "transform-find-and-replace"
+# END Lab 4 Policy Expressions Section 3 Transformational Policies - Find and Replace
+}
+# END Lab 4 Policy Expressions Section 2 Caching Policy
+
+# BEGIN Lab 4 Policy Expressions Section 3 Transformational Policies - Conditional Transformation
+module "apim_starwars_api_getpeoplebyid_policy" {
+  source = "../../modules/azurerm/api_management_api_operation_policy"
+
+  api_name            = module.apim_starwars_api.name
+  api_management_name = module.apim.name
+  resource_group_name = module.resource_group.name
+  operation_id        = module.apim_starwars_api_getpeoplebyid.operation_id
+
+  policy_filename     = "transform-conditional"
+}
+# END Lab 4 Policy Expressions Section 3 Transformational Policies - Conditional Transformation
 
 # # Lab 4 Policy Expressions Section 3 Transformational Policies - XML to JSON
 # module "apim_calc_api_addtwointegers_policy" {

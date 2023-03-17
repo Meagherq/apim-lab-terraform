@@ -50,3 +50,15 @@ Using the Azure Management portal, navigate to the *Colors* API and set a set a 
       </on-error>
   </policies>
   ```
+
+## Caching Policy with Terraform
+
+Policies can also be created using Terraform using the xml policy definition in your resource configuration.
+
+- In the root main.tf file, uncomment the code definitions containing the caching policy. No variables are interpolated for this policy.
+  
+  Ensure that only the proper section is uncommented using the Lab Section comments.
+
+  ![Terraform APIM Calc API Open API Spec](../../assets/images/tf-module-4-add-caching-policy-colors-api.png)
+  
+- Execute a Terraform Plan and Terraform Apply with these changes, this will create the Caching policy for the Colors API.

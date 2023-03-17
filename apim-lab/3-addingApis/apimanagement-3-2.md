@@ -37,7 +37,7 @@ As a demo we will use an API that offers a simple calculator service : [Calc API
 
 ## Import API using OpenAPI in Terraform
 
-API definitions can also be importanted into Terraform using an Open API specification link and a service url.
+API definitions can also be imported into Terraform using an Open API specification link and a service url.
 
 - In the root main.tf file, uncomment the code definitions containing the Calculator API using a link to it's publicly available Open API specification.
   

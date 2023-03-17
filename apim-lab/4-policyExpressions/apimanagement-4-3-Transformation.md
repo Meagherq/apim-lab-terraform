@@ -35,6 +35,18 @@ The *find-and-replace* policy finds a substring in a request or response and rep
 
   ![APIM Policy Find & Replace](../../assets/images/apim-policy-find-and-replace-3.png)
 
+### Transformation - replace string with Terraform
+
+Policies created using Terraform utilzize a single policy definition in your resource configuration. This means that if you want to add to a policy you would use the same definition as the previous caching policy example.
+
+- In the root main.tf file, uncomment the code definitions containing the find and replace policy file. The policy file configuration for the caching policy can be commented out. No variables are interpolated for this policy.
+  
+  Ensure that only the proper section is uncommented using the Lab Section comments.
+
+  ![Terraform APIM Calc API Open API Spec](../../assets/images/tf-module-4-add-find-replace-colors-api.png)
+  
+- Execute a Terraform Plan and Terraform Apply with these changes, this will create the Caching policy for the Colors API.
+
 ---
 
 ## Star Wars API
@@ -92,6 +104,18 @@ Note that the inbound `Accept-Encoding` header is set to `deflate` to ensure tha
 - With *Unlimited* product scope. Notice the four properties in red that are not included in the *Starter* scope response.
 
   ![APIM Policy Transform Unlimited Product](../../assets/images/apim-policy-transform-unlimited-product.png)
+
+### Transformation - conditional with Terraform
+
+Policies created using Terraform utilzize a single policy definition in your resource configuration. This means that if you want to add to a policy you would use the same definition as the previous caching policy example.
+
+- In the root main.tf file, uncomment the code definitions containing the find and replace policy file. The policy file configuration for the caching policy can be commented out. No variables are interpolated for this policy.
+  
+  Ensure that only the proper section is uncommented using the Lab Section comments.
+
+  ![Terraform APIM Calc API Open API Spec](../../assets/images/tf-module-4-add-find-replace-colors-api.png)
+  
+- Execute a Terraform Plan and Terraform Apply with these changes, this will create the Caching policy for the Colors API.
 
 ---
 
