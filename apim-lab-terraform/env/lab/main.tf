@@ -31,7 +31,91 @@ module "apim" {
     location = module.resource_group.location
     resource_group_name = module.resource_group.name
     publisher_name = "Quinn Meagher"
-    publisher_email = "admin@MngEnvMCAP884881.onmicrosoft.com"
+    publisher_email = "demoemail@demoqrm.com"
+
+    # scale_locations = { "EastUS": 2, "WestUS": 2 }
+}
+
+module "apim_echo_api" {
+    source = "../../modules/azurerm/api_management_api"
+
+    name = "echo-api"
+    display_name = "Echo API"
+    description = "Implementing the Echo API."
+    resource_group_name = module.resource_group.name
+    service_url = "http://echoapi.cloudapp.net/api"
+    api_management_name = module.apim.name
+    content_format = "openapi+json"
+    content_value = file("../../modules/openapi/Echo_API.json")
+    path = "echo"
+    protocols = ["https"]
+
+    # subscription_required = true
+}
+
+##Comment out for Echo API EventHub Logging policy section
+module "apim_echo_api_base_policy" {
+    source = "../../modules/azurerm/api_management_api_policy"
+
+    api_name = module.apim_echo_api.name
+    api_management_name = module.apim.name
+    resource_group_name = module.resource_group.name
+    policy_filename = "base"
+
+    vars = {}
+}
+
+# Starter Tier Product
+module "apim_starter_tier_product" {
+    source = "../../modules/azurerm/api_management_product"
+
+    product_id = "starter"
+    api_management_name = module.apim.name
+    resource_group_name = module.resource_group.name
+    display_name = "Starter"
+    subscription_required = true
+    published = true
+    approval_required = false
+}
+
+# Unlimited Tier Product
+module "apim_unlimited_tier_product" {
+    source = "../../modules/azurerm/api_management_product"
+
+    product_id = "unlimited"
+    api_management_name = module.apim.name
+    resource_group_name = module.resource_group.name
+    display_name = "Unlimited"
+    subscription_required = true
+    published = true
+    approval_required = false
+}
+
+module "apim_starter_tier_product_policy" {
+    source = "../../modules/azurerm/api_management_product_policy"
+
+    product_id = module.apim_starter_tier_product.product_id
+    resource_group_name = module.resource_group.name
+    api_management_name = module.apim.name
+    policy_filename = "starter"
+}
+
+module "apim_echo_api_starter_product_assocation" {
+    source = "../../modules/azurerm/api_management_product_api"
+
+    api_name = module.apim_echo_api.name
+    resource_group_name = module.resource_group.name
+    api_management_name = module.apim.name
+    product_id = module.apim_starter_tier_product.product_id
+}
+
+module "apim_echo_api_unlimited_product_assocation" {
+    source = "../../modules/azurerm/api_management_product_api"
+
+    api_name = module.apim_echo_api.name
+    resource_group_name = module.resource_group.name
+    api_management_name = module.apim.name
+    product_id = module.apim_unlimited_tier_product.product_id
 }
 
 module "apim_global_cors_policy" {
@@ -39,143 +123,154 @@ module "apim_global_cors_policy" {
 
     api_management_id = module.apim.id
     policy_filename = "cors"
-    vars = { origins = [module.apim.developer_portal_url] }
+    vars = { origins = [module.apim.developer_portal_url, "https://colors-web.azurewebsites.net/"] }
     # Use line below to add the StarWars API to the global CORS policies
-    # vars = { origins = [module.apim.developer_portal_url, module.apim_starwars_api.origin]}
+    # vars = { origins = [module.apim.developer_portal_url, "https://colors-web.azurewebsites.net/", module.apim_starwars_api.origin]}
 }
 
-# # Lab 2 Developer Portal: Section 3 Product Management
+# BEGIN Lab 2 Developer Portal: Section 3 Product Management 
 # Gold Tier Product
-# module "apim_gold_tier_product" {
-#     source = "../../modules/azurerm/api_management_product"
+module "apim_gold_tier_product" {
+    source = "../../modules/azurerm/api_management_product"
 
-#     product_id = "goldtier"
-#     api_management_name = module.apim.name
-#     resource_group_name = module.resource_group.name
-#     display_name = "Gold Tier"
-#     subscription_required = true
-#     published = true
-#     approval_required = false
-# }
+    product_id = "goldtier"
+    api_management_name = module.apim.name
+    resource_group_name = module.resource_group.name
+    display_name = "Gold Tier"
+    subscription_required = true
+    published = true
+    approval_required = false
+}
 
-# module "apim_developers_group_gold_tier_product" {
-#     source = "../../modules/azurerm/api_management_product_group"
+module "apim_developers_group_gold_tier_product" {
+    source = "../../modules/azurerm/api_management_product_group"
     
-#     product_id = "goldtier"
-#     group_name = "developers"
-#     api_management_name = module.apim.name
-#     resource_group_name = module.resource_group.name
-# }
+    product_id = module.apim_gold_tier_product.product_id
+    group_name = "developers"
+    api_management_name = module.apim.name
+    resource_group_name = module.resource_group.name
+}
 
-# module "apim_guests_group_gold_tier_product" {
-#     source = "../../modules/azurerm/api_management_product_group"
+module "apim_guests_group_gold_tier_product" {
+    source = "../../modules/azurerm/api_management_product_group"
     
-#     product_id = "goldtier"
-#     group_name = "guests"
-#     api_management_name = module.apim.name
-#     resource_group_name = module.resource_group.name
-# }
+    product_id = module.apim_gold_tier_product.product_id
+    group_name = "guests"
+    api_management_name = module.apim.name
+    resource_group_name = module.resource_group.name
+}
+# END Lab 2 Developer Portal: Section 3 Product Management 
 
-# module "apim_starwars_api_version_set" {
-#     source = "../../modules/azurerm/api_management_api_version_set"
-#
-#     name = "starwars-api-vs"
-#     resource_group_name = module.resource_group.name
-#     api_management_name = module.apim.name
-#     display_name = "StarWarsApiVersionSet"
-# }
+# BEGIN Lab 3 Adding APIs: Section 1 Add API from scratch
+module "apim_starwars_api_version_set" {
+    source = "../../modules/azurerm/api_management_api_version_set"
 
-# # Lab 3 Adding APIs: Section 1 Add API from scratch
-# module "apim_starwars_api" {
-#     source = "../../modules/azurerm/api_management_api"
+    name = "starwars-api-vs"
+    resource_group_name = module.resource_group.name
+    api_management_name = module.apim.name
+    display_name = "StarWarsApiVersionSet"
+}
 
-#     name = "star-wars"
-#     display_name = "Star Wars"
-#     description = "Implementing the Star Wars API."
-#     service_url = "https://swapi.dev/api"
-#     path = "sw"
-#     protocols = ["https"]
-#     version_set_id = module.apim_starwars_api_version_set.id
-# }
+module "apim_starwars_api" {
+    source = "../../modules/azurerm/api_management_api"
 
-# module "apim_starwars_api_starter_product_assocation" {
-#     source = "../../modules/azurerm/api_management_product_api"
-#
-#     api_name = module.apim_star_wars_api.name
-#     resource_group_name = module.resource_group.name
-#     api_management_name = module.apim.name
-#     product_id = "Starter"
-# }
+    name = "star-wars"
+    display_name = "Star Wars"
+    description = "Implementing the Star Wars API."
+    resource_group_name = module.resource_group.name
+    api_management_name = module.apim.name
+    service_url = "https://swapi.dev/api"
+    path = "sw"
+    versionNumber = "v1"
+    protocols = ["https"]
+    version_set_id = module.apim_starwars_api_version_set.id
+}
 
-# module "apim_starwars_api_unlimited_product_assocation" {
-#     source = "../../modules/azurerm/api_management_product_api"
-#
-#     api_name = module.apim_star_wars_api.name
-#     resource_group_name = module.resource_group.name
-#     api_management_name = module.apim.name
-#     product_id = "Unlimited"
-# }
+module "apim_starwars_api_starter_product_assocation" {
+    source = "../../modules/azurerm/api_management_product_api"
 
-# module "apim_starwars_api_getpeople" {
-#     source = "../../modules/azurerm/api_managment_api_operation"
+    api_name = module.apim_starwars_api.name
+    resource_group_name = module.resource_group.name
+    api_management_name = module.apim.name
+    product_id = "Starter"
+}
 
-#     operationId = "getpeople"
-#     api_name = module.apim_starwars_api.name
-#     api_management_name = module.apim.name
-#     resource_group_name = module.resource_group.name
-#     display_name = "GetPeople"
-#     method = "GET"
-#     url_template = "/people/"
-#     description = "Get all people"
-#     status_code = 200
-# }
+module "apim_starwars_api_unlimited_product_assocation" {
+    source = "../../modules/azurerm/api_management_product_api"
 
-# module "apim_starwars_api_getpeoplebyid" {
-#     source = "../../modules/azurerm/api_managment_api_operation"
+    api_name = module.apim_starwars_api.name
+    resource_group_name = module.resource_group.name
+    api_management_name = module.apim.name
+    product_id = "Unlimited"
+}
 
-#     operationId = "getpeoplebyid"
-#     api_name = module.apim_starwars_api.name
-#     api_management_name = module.apim.name
-#     resource_group_name = module.resource_group.name
-#     display_name = "GetPeopleById"
-#     method = "GET"
-#     url_template = "/people/{id}"
-#     description = "Get people by Id"
-#     status_code = 200
-# }
+module "apim_starwars_api_getpeople" {
+    source = "../../modules/azurerm/api_management_api_operation"
 
-# # Lab 3 Adding APIs: Section 2 Import API using OpenAPI
+    operation_id = "getpeople"
+    api_name = module.apim_starwars_api.name
+    api_management_name = module.apim.name
+    resource_group_name = module.resource_group.name
+    display_name = "GetPeople"
+    method = "GET"
+    url_template = "/people/"
+    description = "Get all people"
+    status_code = 200
+}
+
+module "apim_starwars_api_getpeoplebyid" {
+    source = "../../modules/azurerm/api_management_api_operation"
+
+    operation_id = "getpeoplebyid"
+    api_name = module.apim_starwars_api.name
+    api_management_name = module.apim.name
+    resource_group_name = module.resource_group.name
+    display_name = "GetPeopleById"
+    method = "GET"
+    url_template = "/people/{id}"
+    description = "Get people by Id"
+    status_code = 200
+}
+# END Lab 3 Adding APIs: Section 1 Add API from scratch
+
+# # BEGIN Lab 3 Adding APIs: Section 2 Import API using OpenAPI
 # module "apim_calc_api" {
 #     source = "../../modules/azurerm/api_management_api"
 
 #     name = "basic-calculator"
 #     display_name = "Basic Calculator"
 #     description = "Arithmetics is just a call away!"
-#     # service_url = "https://swapi.dev/api"
+#     service_url = "http://calcapi.cloudapp.net"
+#     api_management_name = module.apim.name
+#     resource_group_name = module.resource_group.name
 #     path = "calc"
 #     protocols = ["https, http"]
-
+#     versionNumber = "v1"
 #     content_format = "swagger-link-json"
 #     content_value = "http://calcapi.cloudapp.net/calcapi.json"
 # }
+# # END Lab 3 Adding APIs: Section 2 Import API using OpenAPI
 
-# # Lab 3 Adding APIs: Section 3 Calling APIs
+# # BEGIN Lab 3 Adding APIs: Section 3 Calling APIs
 # module "apim_colors_api" {
 #     source = "../../modules/azurerm/api_management_api"
 
 #     name = "colors-api"
 #     display_name = "Colors API"
 #     description = "Fun with Colors"
-#     # service_url = "https://swapi.dev/api"
-#     path = ""
+#     service_url = "https://colors-api.azurewebsites.net"
+#     api_management_name = module.apim.name
+#     resource_group_name = module.resource_group.name
+#     path = "color"
 #     protocols = ["https]
-#     
+#     versionNumber = "v1"
+
 #     content_format = "swagger-link-json"
 #     content_value = "https://colors-api.azurewebsites.net/swagger/v1/swagger.json"
 # }
+# # END Lab 3 Adding APIs: Section 3 Calling APIs
 
-
-# # Lab 4 Policy Expressions Section 2 Caching Policy
+# # BEGIN Lab 4 Policy Expressions Section 2 Caching Policy
 # module "apim_calc_api_getrandcolor_policy" {
 #   source = "../../modules/azurerm/api_management_api_operation_policy"
 
@@ -190,6 +285,7 @@ module "apim_global_cors_policy" {
 # # policy_filename     = "transform-find-and-replace"
 #
 # }
+# # END Lab 4 Policy Expressions Section 2 Caching Policy
 
 # # Lab 4 Policy Expressions Section 3 Transformational Policies - Conditional Transformation
 # module "apim_starwars_api_getpeoplebyid_policy" {
@@ -231,7 +327,7 @@ module "apim_global_cors_policy" {
 # # policy_filename     = "abort-processing"
 # }
 
-# # Lab 4 Policy Expressions Section 4 Named Values
+# Lab 4 Policy Expressions Section 4 Named Values
 # module "apim_timenow_named_value" {
 #   source = "../../modules/azurerm/api_management_named_value"
 
@@ -397,7 +493,7 @@ module "apim_global_cors_policy" {
 #     name = "applicationinsights"
 #     resource_group_name = module.resource_group_name
 #     api_management_name = module.apim.name
-#     api_name            = module.apim_starwars_api.name
+#     api_name            = module.apim_colors_api.name
 #     api_management_logger_id = module.apim_logger_application_insights.id
 #     verbosity = "verbose"
 #     http_correlation_protocol = "Legacy"
@@ -451,7 +547,7 @@ module "apim_global_cors_policy" {
 # module "apim_echo_api_log_to_eventhub_policy" {
 #     source = "../../modules/azurerm/api_management_api_policy"
 
-#     api_name = "echo-api"
+#     api_name = module.apim_echo_api.name
 #     api_management_name = module.apim.name
 #     resource_group_name = module.resource_group.name
 #     policy_filename = "log-to-eventhub"

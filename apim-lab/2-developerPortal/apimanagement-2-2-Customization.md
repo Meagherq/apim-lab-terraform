@@ -35,3 +35,9 @@ Look at the available notifications and notifications templates which are custom
 ![APIM Notification Templates](../../assets/images/apim-notification-templates.png)
 
 ![APIM Notification Template Edit](../../assets/images/apim-notification-edit.png)
+
+### Email Configuration in Terraform
+
+Custom email templates can also be deployed using Terraform. Using the template syntax and variable interpolation you can create dynamic templates.
+
+![Terraform APIM Notification Template Module](../../assets/images/tf-apim-email-template.png)

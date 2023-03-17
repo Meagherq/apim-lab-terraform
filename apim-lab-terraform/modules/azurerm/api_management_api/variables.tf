@@ -1,10 +1,12 @@
 variable name {}
 variable resource_group_name {}
 variable api_management_name {}
-variable version {
-    default = "v1"
+variable versionNumber {
+    default = null
 }
-variable version_set_id {}
+variable version_set_id {
+    default = null
+}
 variable revision {
     default = 1
 }

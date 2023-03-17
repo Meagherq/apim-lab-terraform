@@ -1,0 +1,10 @@
+variable name {}
+variable resource_group_name {}
+variable location {}
+variable resource_id {}
+variable maximum_capacity {}
+variable metric_name {}
+variable scale_up_threshold {}
+variable metric_namespace {}
+variable scale_down_threshold {}
+variable admin_email {}

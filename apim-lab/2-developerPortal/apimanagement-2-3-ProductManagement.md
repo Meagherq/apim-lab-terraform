@@ -33,3 +33,13 @@ A product contains one or more APIs as well as a usage quota and the terms of us
   Back in the private browsing session, browse to *Products* and observe the new *Gold Tier*. 
 
   ![APIM Developer Portal Added Product](../../assets/images/apim-developer-portal-added-product.png)
+
+### Product Definition in Terraform
+
+- In the root main.tf file, uncomment the code definitions containing the "Gold Tier" product and its associated groups.
+  
+  Ensure that only the proper section is uncommented using the Lab Section comments.
+
+  ![Terraform APIM Product and Groups](../../assets/images/tf-module-2-product-management.png)
+  
+- Execute a Terraform Plan and Terraform Apply with these changes, this will create the Gold Tier product and two associatd groups.

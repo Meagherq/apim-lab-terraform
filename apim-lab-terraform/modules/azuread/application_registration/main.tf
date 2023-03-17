@@ -4,7 +4,7 @@ resource "azuread_application" "appreg" {
   display_name     = var.display_name
   identifier_uris  = ["api://${var.app_identifier}"]
   owners           = [data.azuread_client_config.current.object_id]
-  sign_in_audience = "AzureADMultipleOrgs"
+  sign_in_audience = var.signInAudiance
 
   api {
     mapped_claims_enabled          = true

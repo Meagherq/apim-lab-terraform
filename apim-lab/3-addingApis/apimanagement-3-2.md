@@ -35,7 +35,20 @@ As a demo we will use an API that offers a simple calculator service : [Calc API
 
   ![APIM Add Calculator API](../../assets/images/apim-add-calc-api-2.png)
 
+## Import API using OpenAPI in Terraform
+
+API definitions can also be importanted into Terraform using an Open API specification link and a service url.
+
+- In the root main.tf file, uncomment the code definitions containing the Calculator API using a link to it's publicly available Open API specification.
+  
+  Ensure that only the proper section is uncommented using the Lab Section comments.
+
+  ![Terraform APIM Calc API Open API Spec](../../assets/images/tf-module-3-add-calc-api-open-api.png)
+  
+- Execute a Terraform Plan and Terraform Apply with these changes, this will create the Star Wars API and its operations.
+
 - Back in the Developer Portal, try out the Calculator API via the *Add two integers* GET method, then examine the response.  
+
 > Accepting the defaults of `49` and `51` suffices. There's presently an issue where defaults are shown in a dropdown. If you wanted to change the values, add new `a` and `b` parameters and values, then remove the dropdown values.
 
 ![APIM Developer Portal Calculator API Try It](../../assets/images/apim-developer-portal-calc-api-try-it-1.png)

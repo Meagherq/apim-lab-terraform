@@ -29,6 +29,15 @@ Please do not modify other settings. Specifically, the *Virtual network* tab sho
 
 ![APIM deploy blade Virtual Network tab](../../assets/images/apim-deploy-blade-vnet.png)
 
+## Create an API Management instance with Terraform
+Using the provided Terraform lab content, we will first update the root level variables so that resources are created with a user based naming convetion and in the proper region. 
+
+![Terraform Root Variables](../../assets/images/tf-root-variables.png)
+
+When using Terraform to create an Azure API Management instance, all starter resources must be manually created. These resources are included in thie demonstration. Execute a Terraform Plan and Terraform Apply without any additional changes, this will deploy the base resources required for the first Lab Module exercise.
+
+![Terraform APIM Creation](../../assets/images/tf-apim-creation.png)
+
 ## Verifying the API Management instance
 
 Once the APIM instance has been created, please verify that it functions correctly by following these steps:
@@ -59,6 +68,12 @@ Back in APIM, switch to the *Settings* tab and uncheck *Subscription required* a
 > Subscriptions are important and useful, but in this case, we just want to quickly verify the APIM instance is working as intended.
 
 ![APIM Echo API Disable Required Subscription](../../assets/images/apim-echo-api-test-4.png)
+
+To make this change in Terraform, uncomment the subscription required property in the module "apim_echo_api" in the root main.tf file
+
+![Terraform Subscription Required](../../assets/images/tf-module-1-subscription-required.png)
+
+Execute a Terraform Plan and Terraform Apply with these changes, this will update the Echo API configuration to require a subscription.
 
 Accessing the link in your browser should now show you no error message. In fact, in order to verify the 200, it's easiest to open your Developer Tools (F12), navigate to the *Network* tab, and look at *All* requests to see the 200.
 

@@ -44,6 +44,18 @@ Instead of developing an API, for this lab you will use the existing [*Star Wars
 
   ![APIM Star Wars API Add Operation](../../assets/images/apim-star-wars-api-add-operation.png)
 
+### Add API from Scratch with Terraform
+
+To deploy the [*Star Wars* API](https://swapi.dev): using Terraform we will be using a service url. 
+
+- In the root main.tf file, uncomment the code definitions containing the Star Wars API and its operations.
+  
+  Ensure that only the proper section is uncommented using the Lab Section comments.
+
+  ![Terraform APIM Star Wars API and Operations](../../assets/images/tf-module-3-add-star-wars-api.png)
+  
+- Execute a Terraform Plan and Terraform Apply with these changes, this will create the Star Wars API and its operations.
+
 ### Access Star Wars API from Developer Portal
 
 - Switch now to the Developer Portal and sign in as a developer with a subscription. 
