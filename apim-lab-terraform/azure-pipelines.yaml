@@ -1,5 +1,5 @@
 variables:
-  vmImageName: 'ubuntu-latest'
+  vmImageName: 'windows-2019'
 
 resources:
   repositories:
@@ -8,7 +8,7 @@ resources:
     trigger:
       - main
       - release/*
-    name: QRM DevOps/apim-lab-terraform-github
+    name: QRM DevOps/apim-lab-terraform
 
 pool:
   vmImage: $(vmImageName)
@@ -28,19 +28,17 @@ stages:
   - stage: LabCD
     displayName: Lab CD
     jobs:
-    - job: Plan
-      displayName:  Lab Plan
+    - job: Deploy
+      displayName:  Lab Deploy
       steps:
-      - download: current
-        artifact: drop
-      # - task: CopyFiles@2
-      #   displayName: 'Copy Files'
-      #   inputs:
-      #     SourceFolder: '$(Pipeline.Workspace)/$(initials)-apim-lab-terraform/drop'
-      #     TargetFolder: '$(System.DefaultWorkingDirectory)'
+      - task: CopyFiles@2
+        displayName: 'Copy Files'
+        inputs:
+          SourceFolder: '$(Pipeline.Workspace)/$(initials)-apim-lab-terraform/drop'
+          TargetFolder: '$(System.DefaultWorkingDirectory)'
       - script: |
-          cd '$(Pipeline.Workspace)/drop/apim-lab-terraform/env/lab)'
-          printf 'terraform {  \nbackend "azurerm" {  \nstorage_account_name="lab$(initials)prereqsa" \ncontainer_name="tfstate" \nkey="lab.terraform.tfstate" \nresource_group_name="lab-$(initials)-prereq" \n}\n}' >> backend.tf
+          cd $(WorkingDirectory)
+          printf 'terraform {  \nbackend "azurerm" {  \nstorage_account_name="lab$(initials)prereqsa" \ncontainer_name="tfstate" \nkey="lab.terraform.tfstate" \nresource_group_name="lab-$(intiails)-prereq-rg" \n}\n}' >> backend.tf
         displayName: 'Setup Backend Config'
       - task: Docker@1
         displayName: 'Terraform Init'
