@@ -8,6 +8,16 @@ resource "azurerm_api_management_api_operation" "op" {
   url_template        = var.url_template
   description         = var.description
 
+  dynamic "template_parameter" {
+    for_each = var.template_parameters
+
+    content {
+      name = template_parameter.key
+      required = template_parameter.value["required"]
+      type = template_parameter.value["type"]
+    }
+  }
+
   response {
     status_code = var.status_code
   }

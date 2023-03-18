@@ -230,10 +230,21 @@ module "apim_starwars_api_getpeoplebyid" {
     url_template = "/people/{id}/"
     description = "Get people by Id"
     status_code = 200
+
+    template_parameters = { "id": { "required": true, "type": "string" }}
 }
 # END Lab 3 Adding APIs: Section 1 Add API from scratch
 
 # BEGIN Lab 3 Adding APIs: Section 2 Import API using OpenAPI
+module "apim_calc_api_version_set" {
+    source = "../../modules/azurerm/api_management_api_version_set"
+
+    name = "calc-api-vs"
+    resource_group_name = module.resource_group.name
+    api_management_name = module.apim.name
+    display_name = "CalculatorApiVersionSet"
+}
+
 module "apim_calc_api" {
     source = "../../modules/azurerm/api_management_api"
 
@@ -243,8 +254,9 @@ module "apim_calc_api" {
     service_url = "http://calcapi.cloudapp.net"
     api_management_name = module.apim.name
     resource_group_name = module.resource_group.name
+    version_set_id = module.apim_calc_api_version_set.id
     path = "calc"
-    protocols = ["https, http"]
+    protocols = ["https", "http"]
     versionNumber = "v1"
     content_format = "swagger-link-json"
     content_value = "http://calcapi.cloudapp.net/calcapi.json"
@@ -252,6 +264,15 @@ module "apim_calc_api" {
 # END Lab 3 Adding APIs: Section 2 Import API using OpenAPI
 
 # BEGIN Lab 3 Adding APIs: Section 3 Calling APIs
+module "apim_color_api_version_set" {
+    source = "../../modules/azurerm/api_management_api_version_set"
+
+    name = "color-api-vs"
+    resource_group_name = module.resource_group.name
+    api_management_name = module.apim.name
+    display_name = "ColorApiVersionSet"
+}
+
 module "apim_colors_api" {
     source = "../../modules/azurerm/api_management_api"
 
@@ -261,11 +282,12 @@ module "apim_colors_api" {
     service_url = "https://colors-api.azurewebsites.net"
     api_management_name = module.apim.name
     resource_group_name = module.resource_group.name
+    version_set_id = module.apim_color_api_version_set.id
     path = "color"
     protocols = ["https"]
     versionNumber = "v1"
 
-    content_format = "swagger-link-json"
+    content_format = "openapi-link"
     content_value = "https://colors-api.azurewebsites.net/swagger/v1/swagger.json"
 }
 
@@ -291,10 +313,10 @@ module "apim_colors_api_unlimited_product_assocation" {
 # END Lab 3 Adding APIs: Section 3 Calling APIs
 
 # BEGIN Lab 4 Policy Expressions Section 2 Caching Policy
-module "apim_calc_api_getrandcolor_policy" {
+module "apim_color_api_getrandcolor_policy" {
   source = "../../modules/azurerm/api_management_api_operation_policy"
 
-  api_name            = module.apim_calc_api.name
+  api_name            = module.apim_colors_api.name
   api_management_name = module.apim.name
   resource_group_name = module.resource_group.name
   operation_id        = "getrandomcolor"

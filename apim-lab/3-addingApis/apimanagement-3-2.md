@@ -43,7 +43,7 @@ API definitions can also be imported into Terraform using an Open API specificat
   
   Ensure that only the proper section is uncommented using the Lab Section comments.
 
-  ![Terraform APIM Calc API Open API Spec](../../assets/images/tf-module-3-add-calc-api-open-api.png)
+  ![Terraform APIM Calc API Open API Spec](../../assets/images/tf-module-3-add-calc-api.png)
   
 - Execute a Terraform Plan and Terraform Apply with these changes, this will create the Star Wars API and its operations.
 

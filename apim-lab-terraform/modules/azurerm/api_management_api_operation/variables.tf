@@ -7,3 +7,6 @@ variable method {}
 variable url_template {}
 variable description {}
 variable status_code {}
+variable template_parameters {
+    default = {}
+}
