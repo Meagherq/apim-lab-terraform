@@ -59,6 +59,16 @@ Before you can use Azure Application Insights, you first need to create an insta
 
     > Behind the scenes, a [Diagnostic](https://docs.microsoft.com/rest/api/apimanagement/2019-12-01/diagnostic/createorupdate) entity named 'applicationinsights' is created at the API level.
 
+### Application Insights logging with Terraform
+
+- In the root main.tf file, uncomment the code definitions containing the Application Insights resource instance as well as the diagnostics configuration for the Colors API.
+  
+  Ensure that only the proper section is uncommented using the Lab Section comments.
+
+  ![Terraform APIM Color API Application Insights logging](../../assets/images/tf-module-5-add-app-insights-color-api.png)
+  
+- Execute a Terraform Plan and Terraform Apply with these changes, this will create a rev2 resource for the Color API and its configuration.
+
 ### What data is added to Azure Application Insights
 
 Azure Application Insights receives:

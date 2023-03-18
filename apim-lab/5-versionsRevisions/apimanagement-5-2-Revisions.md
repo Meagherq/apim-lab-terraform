@@ -46,6 +46,20 @@ nav_order: 2
 
   ![APIM Revision Add Caching](../../assets/images/apim-revision-add-caching-2.png)
 
+### Add a new revision with Terraform
+
+API revisions can also be created in Terraform using the source_api_id property. This lets Azure know to perform the required background operations necessary to clone the previous api configuration.
+
+- In the root main.tf file, uncomment the code definitions containing the Calculator API Version 2 Revision 2 using the Calculator Version 2 definition via the source_app_id property.
+  
+  Ensure that only the proper section is uncommented using the Lab Section comments.
+
+  ![Terraform APIM Calc API v2 rev2](../../assets/images/tf-module-5-add-calc-api-v2-rev2.png)
+  
+- Execute a Terraform Plan and Terraform Apply with these changes, this will create a rev2 resource for the Calculator API v2 and its configuration.
+
+Note how new product associations are not required for revisions but are required for versions. 
+
 ### Test the new revision
 
 - From the Azure portal, test the `GetPeople` operation.

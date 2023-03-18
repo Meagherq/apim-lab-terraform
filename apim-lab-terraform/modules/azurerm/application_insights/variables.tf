@@ -1,7 +1,9 @@
 variable name {}
-variable resource_group_location {}
+variable location {}
 variable resource_group_name {}
 variable application_type {
     default = "other"
 }
-variable "workspace_id" {}
+variable "workspace_id" {
+    default = null
+}

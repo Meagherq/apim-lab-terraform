@@ -44,8 +44,26 @@ The ability to terminate a response gracefully is of importance in a number of c
   </inbound>
   ```
 
+### Aborting the processing with Terraform
+- In the root main.tf file, uncomment the code definition containing the abort processing policy filename.
+  
+  Ensure that only the proper section is uncommented using the Lab Section comments.
+
+  ![Terraform APIM Calc API abort processing policy](../../assets/images/tf-module-4-add-abort-processing-calc-api.png)
+  
+- Execute a Terraform Plan and Terraform Apply with these changes, this will create the abort processing policy for the Calc API operation.
+
   ![APIM Policy Abort Response](../../assets/images/apim-policy-abort-response.png)
 
   ### Clean Up
 
   Now that you have seen how to gracefully terminate a request with a response, it is time to clean up the code to prevent a downstream impact in subsequent labs. **Please remove the `<choose>` logic above to let all requests flow again, then save the changes.**
+
+### Clean up the Terraform solution
+- In the root main.tf file, revert the code definition back so that the send one-way policy filename is used. This will prevent future requests from automatically failing.
+  
+  Ensure that only the proper section is uncommented using the Lab Section comments.
+
+  ![Terraform APIM Calc API revert abort processing policy](../../assets/images/tf-module-4-add-send-one-way-calc-api.png)
+  
+- Execute a Terraform Plan and Terraform Apply with these changes, this will revert the policy back to the send one-way exercise for the Calc API operation.

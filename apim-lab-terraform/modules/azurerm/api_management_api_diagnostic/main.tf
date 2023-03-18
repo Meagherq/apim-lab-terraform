@@ -11,10 +11,8 @@ resource "azurerm_api_management_api_diagnostic" "example" {
   verbosity                 = var.verbosity
   http_correlation_protocol = var.http_correlation_protocol
 
-
-//TODO parameterize
   frontend_request {
-    body_bytes = 32
+    body_bytes = 0
     headers_to_log = [
       "content-type",
       "accept",
@@ -23,7 +21,7 @@ resource "azurerm_api_management_api_diagnostic" "example" {
   }
 
   frontend_response {
-    body_bytes = 32
+    body_bytes = 0
     headers_to_log = [
       "content-type",
       "content-length",
@@ -32,7 +30,7 @@ resource "azurerm_api_management_api_diagnostic" "example" {
   }
 
   backend_request {
-    body_bytes = 32
+    body_bytes = 0
     headers_to_log = [
       "content-type",
       "accept",
@@ -41,7 +39,7 @@ resource "azurerm_api_management_api_diagnostic" "example" {
   }
 
   backend_response {
-    body_bytes = 32
+    body_bytes = 0
     headers_to_log = [
       "content-type",
       "content-length",

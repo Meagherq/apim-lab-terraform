@@ -54,16 +54,16 @@ module "apim_echo_api" {
 }
 
 ##Comment out for Echo API EventHub Logging policy section
-module "apim_echo_api_base_policy" {
-    source = "../../modules/azurerm/api_management_api_policy"
+# module "apim_echo_api_base_policy" {
+#     source = "../../modules/azurerm/api_management_api_policy"
 
-    api_name = module.apim_echo_api.name
-    api_management_name = module.apim.name
-    resource_group_name = module.resource_group.name
-    policy_filename = "base"
+#     api_name = module.apim_echo_api.name
+#     api_management_name = module.apim.name
+#     resource_group_name = module.resource_group.name
+#     policy_filename = "base"
 
-    vars = {}
-}
+#     vars = {}
+# }
 
 # Starter Tier Product
 module "apim_starter_tier_product" {
@@ -251,7 +251,7 @@ module "apim_calc_api" {
     name = "basic-calculator"
     display_name = "Basic Calculator"
     description = "Arithmetics is just a call away!"
-    service_url = "http://calcapi.cloudapp.net"
+    service_url = "http://calcapi.cloudapp.net/api"
     api_management_name = module.apim.name
     resource_group_name = module.resource_group.name
     version_set_id = module.apim_calc_api_version_set.id
@@ -342,261 +342,235 @@ module "apim_starwars_api_getpeoplebyid_policy" {
 }
 # END Lab 4 Policy Expressions Section 3 Transformational Policies - Conditional Transformation
 
-# # Lab 4 Policy Expressions Section 3 Transformational Policies - XML to JSON
-# module "apim_calc_api_addtwointegers_policy" {
-#   source = "../../modules/azurerm/api_management_api_operation_policy"
+# BEGIN Lab 4 Policy Expressions Section 3 Transformational Policies - Continued
+module "apim_calc_api_addtwointegers_policy" {
+  source = "../../modules/azurerm/api_management_api_operation_policy"
 
-#   api_name            = module.apim_calc_api.name
+  api_name            = module.apim_calc_api.name
+  api_management_name = module.apim.name
+  resource_group_name = module.resource_group.name
+  operation_id        = "64151e0b46346112109e7b52"
+  
+  # Lab 4 Policy Expressions Section 3 Transformational Policies - XML to JSON
+  # policy_filename     = "xml-to-json"
+  
+  # Lab 4 Policy Expressions Section 3 Transformational Policies - Delete Response Headers
+  # policy_filename     = "delete-response-headers"
+
+  # Lab 4 Policy Expressions Section 3 Transformational Policies - Amend Request to Backend
+  # policy_filename     = "amend-request"
+  
+  # Lab 4 Policy Expressions Section 4 Named Values - Named Value Collection
+  # policy_filename     = "named-value-collection"
+  
+  # Lab 4 Policy Expressions Section 4 Send One Way Policy - Send One Way Request Setup
+  policy_filename     = "send-one-way-request"
+  vars = { webhook_url = "https://webhook.site/0e3f748d-0485-455b-8350-0dbc1b14f5a8" }
+  
+  # Lab 4 Policy Expressions Section 4 Abort Porcessing Policy - Abort Processing
+  # policy_filename     = "abort-processing"
+}
+# END Lab 4 Policy Expressions Section 3 Transformational Policies - Continued
+
+# BEGIN Lab 4 Policy Expressions Section 4 Named Values
+module "apim_timenow_named_value" {
+  source = "../../modules/azurerm/api_management_named_value"  
+
+  name = "TimeNow"
+  display_name = "TimeNow"
+  resource_group_name = module.resource_group.name
+  api_management_name = module.apim.name
+  value = "@(DateTime.Now.ToString())"
+}
+# END Lab 4 Policy Expressions Section 4 Named Values
+
+# BEGIN Lab 4 Policy Expressions Section 4 Mock Policies
+module "apim_starwars_api_getfilm" {
+    source = "../../modules/azurerm/api_management_api_operation"
+
+    operation_id = "getfilm"
+    api_name = module.apim_starwars_api.name
+    api_management_name = module.apim.name
+    resource_group_name = module.resource_group.name
+    display_name = "GetFilm"
+    method = "GET"
+    url_template = "/film"
+    description = "Gets a film"
+    status_code = 200
+}
+
+module "apim_starwars_api_getfilm_policy" {
+  source = "../../modules/azurerm/api_management_api_operation_policy"
+
+  api_name            = module.apim_starwars_api.name
+  api_management_name = module.apim.name
+  resource_group_name = module.resource_group.name
+  operation_id        = module.apim_starwars_api_getfilm.operation_id
+
+  policy_filename     = "mock-response"
+}
+# END Lab 4 Policy Expressions Section 4 Mock Policies
+
+# BEGIN Lab 4 Versioning & Revisions Section 1 Versions
+module "apim_starwars_api_v2" {
+    source = "../../modules/azurerm/api_management_api"
+
+    name = "star-wars-v2"
+    display_name = "Star Wars"
+    description = "Implementing the Star Wars API."
+    api_management_name = module.apim.name
+    resource_group_name = module.resource_group.name
+    service_url = "https://swapi.dev/api"
+    path = "sw"
+    protocols = ["https"]
+    version_set_id = module.apim_starwars_api_version_set.id
+    versionNumber = "v2"
+    source_api_id = "${module.apim_starwars_api.id};rev=1"
+}
+
+module "apim_starwars_api_v2_starter_product_assocation" {
+    source = "../../modules/azurerm/api_management_product_api"
+
+    api_name = module.apim_starwars_api_v2.name
+    resource_group_name = module.resource_group.name
+    api_management_name = module.apim.name
+    product_id = "Starter"
+}
+
+module "apim_starwars_api_v2_unlimited_product_assocation" {
+    source = "../../modules/azurerm/api_management_product_api"
+
+    api_name = module.apim_starwars_api_v2.name
+    resource_group_name = module.resource_group.name
+    api_management_name = module.apim.name
+    product_id = "Unlimited"
+}
+# END Lab 4 Versioning & Revisions Section 1 Versions
+
+# BEGIN Lab 4 Versioning & Revisions Section 2 Revisions
+module "apim_starwars_api_v2_rev2" {
+    source = "../../modules/azurerm/api_management_api"
+
+    name = "${module.apim_starwars_api_v2.name}"
+    api_management_name = module.apim.name
+    resource_group_name = module.resource_group.name
+    display_name = "Star Wars"
+    description = "Implementing the Star Wars API."
+    service_url = "https://swapi.dev/api"
+    path = "sw"
+    protocols = ["https"]
+    version_set_id = module.apim_starwars_api_version_set.id
+    versionNumber = "v2"
+    revision = "2"
+    source_api_id = "${module.apim_starwars_api_v2.id};rev=1"
+}
+
+# POLICY CANNOT BE APPLIED TO REVISION IN TERRAFORM
+# module "apim_starwars_api_v2_rev2_getpeople_policy" {
+#   source = "../../modules/azurerm/api_management_api_operation_policy"
+#   
+# # Api_name cannot target an endpoint from a revision as all revisions use the same Api_name. Technically, it can be applied on the first execution only but will break the revision api definition in Terraform.
+#   api_name            = "${module.apim_starwars_api_v2_rev2.name}"
 #   api_management_name = module.apim.name
 #   resource_group_name = module.resource_group.name
-#   operation_id        = "addtwointegers"
-#
-#   policy_filename     = "xml-to-json"
-#
-# # Lab 4 Policy Expressions Section 3 Transformational Policies - Delete Response Headers
-# # policy_filename     = "delete-response-headers"
-#
-# # Lab 4 Policy Expressions Section 3 Transformational Policies - Amend Request to Backend
-# # policy_filename     = "amend-request"
-#
-# # Lab 4 Policy Expressions Section 4 Named Values - Named Value Collection
-# # policy_filename     = "named-value-collection"
-# 
-# # Lab 4 Policy Expressions Section 4 Send One Way Policy - Send One Way Request Setup
-# # policy_filename     = "send-one-way-request"
-# # vars = { webhook_url = "" }
+#   operation_id        = module.apim_starwars_api_getpeople.operation_id
 
-# # Lab 4 Policy Expressions Section 4 Abort Porcessing Policy - Abort Processing
-# # policy_filename     = "abort-processing"
+#   policy_filename     = "cache-lookup"
 # }
+# # END Lab 4 Versioning & Revisions Section 2 Revisions
 
-# Lab 4 Policy Expressions Section 4 Named Values
-# module "apim_timenow_named_value" {
-#   source = "../../modules/azurerm/api_management_named_value"
+# BEGIN Lab 5 Analytics & Monitoring Section 2 Application Insights
+module "apim_application_insights" {
+    source = "../../modules/azurerm/application_insights"
 
-#     name = "TimeNow"
-#     display_name = "TimeNow"
-#     resource_group_name = module.resource_group.name
-#     api_management_name = module.apim.name
-#     value = "@(DateTime.Now.ToString())"
-# }
+    name = "${var.environment_prefix}-${var.initials}-insights"
+    location = module.resource_group.location
+    resource_group_name = module.resource_group.name
+    application_type = "other"
+}
 
-# # Lab 4 Policy Expressions Section 4 Mock Policies
-# module "apim_starwars_api_getfilm" {
-#     source = "../../modules/azurerm/api_managment_api_operation"
+module "apim_logger_application_insights" {
+    source = "../../modules/azurerm/api_management_logger"
 
-#     operationId = "getfilm"
-#     api_name = module.apim_starwars_api.name
-#     api_management_name = module.apim.name
-#     resource_group_name = module.resource_group.name
-#     display_name = "GetFilm"
-#     method = "GET"
-#     url_template = "/film"
-#     description = "Gets a film"
-#     status_code = 200
-# }
+    name = "ai-apim-lab"
+    api_management_name = module.apim.name
+    resource_group_name = module.resource_group.name
+    resource_id = module.apim_application_insights.id
 
-# module "apim_starwars_api_getfilm_policy" {
-#   source = "../../modules/azurerm/api_management_api_operation_policy"
+    application_insights_instrumentation_key = nonsensitive(module.apim_application_insights.instrumentation_key)
+}
 
-#   api_name            = module.apim_starwars_api.name
-#   api_management_name = module.apim.name
-#   resource_group_name = module.resource_group.name
-#   operation_id        = module.apim_starwars_api_getfilm.operation_id
-#
-#   policy_filename     = "mock-policy"
-# }
+module "apim_colors_api_diagnostic_app_insights" {
+    source = "../../modules/azurerm/api_management_api_diagnostic"
 
-# # Lab 4 Versioning & Revisions Section 1 Versions
-# module "apim_starwars_api_v2" {
-#     source = "../../modules/azurerm/api_management_api"
+    identifier = "applicationinsights"
+    resource_group_name = module.resource_group.name
+    api_management_name = module.apim.name
+    api_name            = module.apim_colors_api.name
+    api_management_logger_id = module.apim_logger_application_insights.id
+    verbosity = "verbose"
+    http_correlation_protocol = "Legacy"
+    sampling_percentage = "100"
+}
+# END Lab 5 Analytics & Monitoring Section 2 Application Insights
 
-#     name = "star-wars-v2"
-#     display_name = "Star Wars"
-#     description = "Implementing the Star Wars API."
-#     service_url = "https://swapi.dev/api"
-#     path = "sw"
-#     protocols = ["https"]
-#     version_set_id = module.apim_starwars_api_version_set.id
-#     version = "v2"
-#     name = "star-wars-v2"
-# }
+# BEGIN Lab 5 Analytics & Monitoring Section 2 Application Insights
+module "apim_eventhub_namespace" {
+    source = "../../modules/azurerm/eventhub_namespace"
 
-# module "apim_starwars_api_v2_starter_product_assocation" {
-#     source = "../../modules/azurerm/api_management_product_api"
-#
-#     api_name = module.apim_star_wars_api_v2.name
-#     resource_group_name = module.resource_group.name
-#     api_management_name = module.apim.name
-#     product_id = "Starter"
-# }
+    name = "${var.environment_prefix}-${var.initials}-eh-ns"
+    location = module.resource_group.location
+    resource_group_name = module.resource_group.name
+    sku = "Basic"
+}
 
-# module "apim_starwars_api_v2_unlimited_product_assocation" {
-#     source = "../../modules/azurerm/api_management_product_api"
-#
-#     api_name = module.apim_star_wars_api_v2.name
-#     resource_group_name = module.resource_group.name
-#     api_management_name = module.apim.name
-#     product_id = "Unlimited"
-# }
+module "apim_eventhub" {
+    source = "../../modules/azurerm/eventhub"
 
-# module "apim_starwars_api_v2_getpeople" {
-#     source = "../../modules/azurerm/api_managment_api_operation"
+    name = "${var.environment_prefix}-${var.initials}-eh"
+    eventhub_namespace_name = module.apim_eventhub_namespace.name
+    resource_group_name = module.resource_group.name
+    partition_count = 2
+    message_retention = 1
+}
 
-#     operationId = "getpeople"
-#     api_name = module.apim_starwars_api_v2.name
-#     api_management_name = module.apim.name
-#     resource_group_name = module.resource_group.name
-#     display_name = "GetPeople"
-#     method = "GET"
-#     url_template = "/people/"
-#     description = "Get all people"
-#     status_code = 200
-# }
+module "apim_eventhub_sas" {
+    source = "../../modules/azurerm/eventhub_authorization_rule"
 
-# # Lab 4 Versioning & Revisions Section 2 Revisions
-# module "apim_starwars_api_v2_rev2" {
-#     source = "../../modules/azurerm/api_management_api"
+    name = "apim"
+    eventhub_namespace_name = module.apim_eventhub_namespace.name
+    eventhub_name = module.apim_eventhub.name
+    resource_group_name = module.resource_group.name
+    listen = false
+    send = true
+    manage = false
+}
 
-#     name = "star-wars-v2"
-#     display_name = "Star Wars"
-#     description = "Implementing the Star Wars API."
-#     service_url = "https://swapi.dev/api"
-#     path = "sw"
-#     protocols = ["https"]
-#     version_set_id = module.apim_starwars_api_version_set.id
-#     version = "v2"
-#     revision = "2"
-#     name = "star-wars-v2"
-# }
+module "apim_logger_eventhub" {
+    source = "../../modules/azurerm/api_management_logger"
 
-# module "apim_starwars_api_v2_starter_product_assocation" {
-#     source = "../../modules/azurerm/api_management_product_api"
-#
-#     api_name = module.apim_star_wars_api_v2_rev2.name
-#     resource_group_name = module.resource_group.name
-#     api_management_name = module.apim.name
-#     product_id = "Starter"
-# }
+    name = "eh-apim-lab"
+    api_management_name = module.apim.name
+    resource_group_name = module.resource_group.name
+    resource_id = module.apim_eventhub.id
 
-# module "apim_starwars_api_v2_rev2_unlimited_product_assocation" {
-#     source = "../../modules/azurerm/api_management_product_api"
-#
-#     api_name = module.apim_star_wars_api_v2_rev2.name
-#     resource_group_name = module.resource_group.name
-#     api_management_name = module.apim.name
-#     product_id = "Unlimited"
-# }
+    eventhub_name = module.apim_eventhub.name
+    eventhub_connection_string = module.apim_eventhub_sas.connection_string
+}
 
-# module "apim_starwars_api_v2_rev2_getpeople" {
-#     source = "../../modules/azurerm/api_managment_api_operation"
+# Uncomment the base Echo API policy that was created during the initial APIM creation. Due to Terraform's internal dependency tree this can be two apply operations. Alternatively, update the policy_filename and vars in the Echo API policy created in the first module. 
+# Updating the earlier module will only take a single apply.
+module "apim_echo_api_log_to_eventhub_policy" {
+    source = "../../modules/azurerm/api_management_api_policy"
 
-#     operationId = "getpeople"
-#     api_name = module.apim_starwars_api_v2_rev2.name
-#     api_management_name = module.apim.name
-#     resource_group_name = module.resource_group.name
-#     display_name = "GetPeople"
-#     method = "GET"
-#     url_template = "/people/"
-#     description = "Get all people"
-#     status_code = 200
-# }
+    api_name = module.apim_echo_api.name
+    api_management_name = module.apim.name
+    resource_group_name = module.resource_group.name
+    policy_filename = "log-to-eventhub"
 
-# Lab 5 Analytics & Monitoring Section 2 Application Insights
-# module "apim_log_analytics_workspace" {
-#     source = "../../modules/azurerm/log_analytics_workspace"
-
-#     name = "${var.environment_prefix}-${var.initials}-law"
-# }
-
-# module "apim_application_insights" {
-#     source = "../../modules/azurerm/application_insights"
-
-#     name = "${var.environment_prefix}-${var.initials}-insights"
-#     location = module.resource_group.location
-#     resource_group_name = module.resource_group.name
-#     application_type = "other"
-#     workspace_id = module.apim_log_analytics_workspace.id
-# }
-
-# module "apim_logger_application_insights" {
-#     source = "../../modules/azurerm/api_management_logger"
-
-#     name = "ai-apim-lab"
-#     api_management_name = module.apim.name
-#     resource_group_name = module.resource_group.name
-#     resource_id = module.apim_application_insights.id
-
-#     application_insights_instrumentation_key = module.apim_application_insights.instrumentation_key
-# }
-
-# module "apim_colors_api_diagnostic_app_insights" {
-#     source = "../../modules/azurerm/api_management_api_diagnostic"
-
-#     name = "applicationinsights"
-#     resource_group_name = module.resource_group_name
-#     api_management_name = module.apim.name
-#     api_name            = module.apim_colors_api.name
-#     api_management_logger_id = module.apim_logger_application_insights.id
-#     verbosity = "verbose"
-#     http_correlation_protocol = "Legacy"
-#     sampling_percentage = "100"
-# }
-
-# # Lab 5 Analytics & Monitoring Section 2 Application Insights
-# module "apim_eventhub_namespace" {
-#     source = "../../modules/azurerm/eventhub_namespace"
-
-#     name = "${var.environment_prefix}-${var.initials}-eh-ns"
-#     location = module.resource_group.location
-#     resource_group_name = module.resource_group.name
-#     Sku = "Basic"
-# }
-
-# module "apim_eventhub" {
-#     source = "../../modules/azurerm/eventhub"
-
-#     name = "${var.environment_prefix}-${var.initials}-eh"
-#     namespace_name = module.apim_eventhub_namespace.name
-#     resource_group_name = module.resource_group.name
-#     partition_count = 2
-#     message_retention = 1
-# }
-
-# module "apim_eventhub_sas" {
-#     source = "../../modules/azurerm/eventhub_authorization_rule"
-
-#     name = "apim"
-#     namespace_name = module.eventhub_namespace.name
-#     eventhub_name = module.apim_eventhub.name
-#     resource_group_name = module.resource_group.name
-#     listen = false
-#     send = true
-#     manage = false
-# }
-
-# module "apim_logger_eventhub" {
-#     source = "../../modules/azurerm/api_management_logger"
-
-#     name = "eh-apim-lab"
-#     api_management_name = module.apim.name
-#     resource_group_name = module.resource_group.name
-#     resource_id = module.apim_eventhub.id
-
-#     eventhub_name = module.apim_eventhub.name
-#     eventhub_connection_string = module.apim_eventhub_sas.connection_string
-# }
-
-# module "apim_echo_api_log_to_eventhub_policy" {
-#     source = "../../modules/azurerm/api_management_api_policy"
-
-#     api_name = module.apim_echo_api.name
-#     api_management_name = module.apim.name
-#     resource_group_name = module.resource_group.name
-#     policy_filename = "log-to-eventhub"
-
-#     vars = { LoggerId = "${module.apim_logger_eventhub.id}" }
-# }
+    vars = { LoggerId = "${module.apim_logger_eventhub.name}" }
+}
+# END Lab 5 Analytics & Monitoring Section 2 Application Insights
 
 # # Lab 6 Security Section 1 JSON Web Token Validation
 # # Section requires changes to Policy file content

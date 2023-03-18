@@ -11,6 +11,7 @@ resource "azurerm_api_management_api" "api" {
   protocols             = var.protocols
   description           = var.description
   subscription_required = var.subscription_required
+  source_api_id         = var.source_api_id
 
   dynamic "import" {
     for_each = var.content_value == null ? [] : toset([var.content_value])

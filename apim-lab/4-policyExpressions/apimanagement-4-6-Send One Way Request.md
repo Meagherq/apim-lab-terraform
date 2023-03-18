@@ -72,6 +72,15 @@ The following policy and payload applies for both examples in this lab. **Please
 
     ![Webhook Site Success](../../assets/images/webhook-site-2.png)
 
+### Named Value collection with Terraform
+- In the root main.tf file, uncomment the code definition containing the abort processing policy filename. For this policy we will be interpolating our webhook url using the vars property. Add your url from webhook.site to the vars configuration under the key webhook_url
+  
+  Ensure that only the proper section is uncommented using the Lab Section comments.
+
+  ![Terraform APIM Calc API send one-way policy](../../assets/images/tf-module-4-add-send-one-way-calc-api.png)
+  
+- Execute a Terraform Plan and Terraform Apply with these changes, this will create the send one-way policy for the Calc API operation.
+
 ### Send a message to Microsoft Teams channel
 
 An optional lab, for Microsoft Teams, please review [Create an Incoming Webhook](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook#create-an-incoming-webhook-1).

@@ -31,6 +31,18 @@ Proper version management not only helps organize your API, it also aids in API 
 
     ![APIM Version Created](../../assets/images/apim-version-created.png)
 
+### Add a new version with Terraform
+
+API versions can also be created in Terraform using the source_api_id property. This lets Azure know to perform the required background operations necessary to clone the previous api configuration.
+
+- In the root main.tf file, uncomment the code definitions containing the Calculator API Version 2 using the original Calculator Version 1 definition via the source_app_id property.
+  
+  Ensure that only the proper section is uncommented using the Lab Section comments.
+
+  ![Terraform APIM Calc API v2](../../assets/images/tf-module-5-add-calc-api-v2.png)
+  
+- Execute a Terraform Plan and Terraform Apply with these changes, this will create a v2 resource for the Calculator API and its configuration.
+
 ### Test the new version
 
 > Sometimes, the version creation takes just a little bit of time. If you do not see it immediately, please keep refreshing and ensure you select the appropriate version as per below instructions.

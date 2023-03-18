@@ -44,6 +44,15 @@ nav_order: 4
   </inbound>
   ```
 
+### Named Value collection with Terraform
+- In the root main.tf file, uncomment the code definition containing the named-value-collection policy filename. Make sure to also uncomment the Named Value Collection in the root main.tf Terraform file.  No variables are interpolated for this policy.
+  
+  Ensure that only the proper section is uncommented using the Lab Section comments.
+
+  ![Terraform APIM Calc API Named Value collection policy](../../assets/images/tf-module-4-add-named-value-collection-policy.png)
+  
+- Execute a Terraform Plan and Terraform Apply with these changes, this will create the Named Value collection policy for the Calc API operation.
+
 - Test the operation by selecting the *Starter* or *Unlimited* product scope. 
 - Examine the backend trace to find the added header with the evaluated named value:
 

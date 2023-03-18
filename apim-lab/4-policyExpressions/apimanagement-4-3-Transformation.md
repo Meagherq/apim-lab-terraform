@@ -95,16 +95,6 @@ Note that the inbound `Accept-Encoding` header is set to `deflate` to ensure tha
   </policies>
   ```
 
-- Test the API on the *Test* tab with *id* 1 and apply the appropriate *Starter* or *Unlimited* product scope. Examine the different responses.
-
-- With *Starter* or *None* product scope:
-
-  ![APIM Policy Transform Starter Product](../../assets/images/apim-policy-transform-starter-product.png)
-
-- With *Unlimited* product scope. Notice the four properties in red that are not included in the *Starter* scope response.
-
-  ![APIM Policy Transform Unlimited Product](../../assets/images/apim-policy-transform-unlimited-product.png)
-
 ### Transformation - conditional with Terraform
 
 Policies created using Terraform utilzize a single policy definition in your resource configuration. This means that if you want to add to a policy you would use the same definition as the previous caching policy example.
@@ -115,7 +105,18 @@ Policies created using Terraform utilzize a single policy definition in your res
 
   ![Terraform APIM Calc API Open API Spec](../../assets/images/tf-module-4-add-find-replace-colors-api.png)
   
-- Execute a Terraform Plan and Terraform Apply with these changes, this will create the Caching policy for the Colors API.
+- Execute a Terraform Plan and Terraform Apply with these changes, this will create the transformation policy for the Star Wars API operation.
+
+- Test the API on the *Test* tab with *id* 1 and apply the appropriate *Starter* or *Unlimited* product scope. Examine the different responses.
+
+- With *Starter* or *None* product scope:
+
+  ![APIM Policy Transform Starter Product](../../assets/images/apim-policy-transform-starter-product.png)
+
+- With *Unlimited* product scope. Notice the four properties in red that are not included in the *Starter* scope response.
+
+  ![APIM Policy Transform Unlimited Product](../../assets/images/apim-policy-transform-unlimited-product.png)
+
 
 ---
 
@@ -133,6 +134,15 @@ A frequent requirement is to transform content, especially to maintain compatibi
       <xml-to-json kind="direct" apply="always" consider-accept-header="false" />
   </outbound>
   ```
+
+### Transformation - XML to JSON with Terraform
+- In the root main.tf file, uncomment the code definition containing the addtwointegers operation policy. No variables are interpolated for this policy.
+  
+  Ensure that only the proper section is uncommented using the Lab Section comments.
+
+  ![Terraform APIM Calc API XML to JSON policy](../../assets/images/tf-module-4-add-base-transormation-policy.png)
+  
+- Execute a Terraform Plan and Terraform Apply with these changes, this will create the XML to JSON policy for the Calc API operation.
 
 - Test the API and examine the response. Note that it's now JSON.
 
@@ -152,6 +162,15 @@ A frequent requirement is to remove headers, especially ones that return securit
       <set-header name="x-powered-by" exists-action="delete" />
   </outbound>
   ```
+
+### Delete response headers with Terraform
+- In the root main.tf file, uncomment the code definition containing the delete-response-headers policy filename. No variables are interpolated for this policy.
+  
+  Ensure that only the proper section is uncommented using the Lab Section comments.
+
+  ![Terraform APIM Calc API delete response headers policy](../../assets/images/tf-module-4-add-delete-headers-calc-api.png)
+  
+- Execute a Terraform Plan and Terraform Apply with these changes, this will create the Delete response headers policy for the Calc API operation.
 
 - Invoke the API and examine the response, which now no longer contains the two headers. See above screenshot for how it looked prior.
 
@@ -174,6 +193,15 @@ Query string parameters and headers can be easily modified prior to sending the 
       </set-header>
   </inbound>
   ```
+
+### Amend what's passed to the backend with Terraform
+- In the root main.tf file, uncomment the code definition containing the amend-request policy filename. No variables are interpolated for this policy.
+  
+  Ensure that only the proper section is uncommented using the Lab Section comments.
+
+  ![Terraform APIM Calc API amend request policy](../../assets/images/tf-module-4-add-amend-policy.png)
+  
+- Execute a Terraform Plan and Terraform Apply with these changes, this will create the Amend request policy for the Calc API operation.
 
 - Test the call by using either the *Starter* or *Unlimited* product, click on Trace button and then inspect the result on the *Trace* tab. If Tracing is not enabled, press *Enable Tracing*.
 

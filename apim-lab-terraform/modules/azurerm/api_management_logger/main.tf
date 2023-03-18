@@ -6,7 +6,7 @@ resource "azurerm_api_management_logger" "logger" {
 
 
   dynamic "application_insights" {
-    for_each = var.application_insights_instrumentation_key == null ? {} : toset([var.application_insights_instrumentation_key])
+    for_each = var.application_insights_instrumentation_key == null ? [] : toset([var.application_insights_instrumentation_key])
 
     content {
         instrumentation_key = var.application_insights_instrumentation_key
@@ -14,7 +14,7 @@ resource "azurerm_api_management_logger" "logger" {
   }
 
   dynamic "eventhub" {
-    for_each = var.eventhub_name == null ? {} : toset([var.eventhub_name])
+    for_each = var.eventhub_name == null ? [] : toset([var.eventhub_name])
 
     content {
         name = var.eventhub_name
