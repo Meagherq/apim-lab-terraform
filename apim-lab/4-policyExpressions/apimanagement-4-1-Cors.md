@@ -40,3 +40,9 @@ We have already configured the *cors* policy for our APIs in labs 2 & 3. Below i
     <on-error />
 </policies>
 ```
+
+### Cross-origin resource sharing (CORS) with Terraform
+
+The global CORS policy was configured during the inital APIM setup. Below is an image of the global policy module consumption for CORS.
+
+![APIM Terraform Policy CORS All APIs](../../assets/images/tf-apim-policy-cors-all-apis-1.png)  

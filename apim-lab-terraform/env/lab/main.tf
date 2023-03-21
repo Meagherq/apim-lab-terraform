@@ -1,14 +1,22 @@
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "=3.43.0"
+    }
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = "=2.33.0"
+    }
+  }
+}
+
 # Configure the default provider
 provider "azurerm" {
-    version           = "=3.43.0"
-    subscription_id   = var.subscription_id
-
     features {}
 }
 
-provider "azuread" {
-  version           = "=2.33.0"
-}
+provider "azuread" {}
 
 #data
 data "azurerm_client_config" "current" {}
@@ -325,9 +333,8 @@ module "apim_global_cors_policy" {
 
 #   policy_filename     = "cache-lookup"
 
-# # BEGIN Lab 4 Policy Expressions Section 3 Transformational Policies - Find and Replace
+# # Lab 4 Policy Expressions Section 3 Transformational Policies - Find and Replace
 #   # policy_filename     = "transform-find-and-replace"
-# # END Lab 4 Policy Expressions Section 3 Transformational Policies - Find and Replace
 # }
 # # END Lab 4 Policy Expressions Section 2 Caching Policy
 
@@ -578,21 +585,21 @@ module "apim_global_cors_policy" {
 # }
 # # END Lab 5 Analytics & Monitoring Section 2 Configure Log to EventHub
 
-# # BEGIN Lab 6 Security Section 1 JSON Web Token
-# # Section requires changes to Policy file content
-# module "apim_calc_api_validate_jwt_policy" {
-#     source = "../../modules/azurerm/api_management_api_policy"
+# BEGIN Lab 6 Security Section 1 JSON Web Token
+# Section requires changes to Policy file content
+module "apim_calc_api_validate_jwt_policy" {
+    source = "../../modules/azurerm/api_management_api_policy"
 
-#     api_name = module.apim_calc_api.name
-#     api_management_name = module.apim.name
-#     resource_group_name = module.resource_group.name
-#     policy_filename = "validate-jwt"
+    api_name = module.apim_calc_api.name
+    api_management_name = module.apim.name
+    resource_group_name = module.resource_group.name
+    policy_filename = "validate-jwt"
 
-#     vars = { SigningKey = "123412341234123412341234", Audience = "" }
+    vars = { SigningKey = "123412341234123412341234", Audience = "" }
 
-#     # vars = { SigningKey = "123412341234123412341234", Audience = module.apim_backend_app_oauth_app_reg.app_id }
-# }
-# # END Lab 6 Security Section 1 JSON Web Token
+    # vars = { SigningKey = "123412341234123412341234", Audience = module.apim_backend_app_oauth_app_reg.app_id }
+}
+# END Lab 6 Security Section 1 JSON Web Token
 
 # # BEGIN Lab 6 Security Section 2 Authorization Code Grant
 # resource "random_uuid" "backend_scope_id" {}

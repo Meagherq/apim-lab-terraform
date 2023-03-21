@@ -103,7 +103,7 @@ Policies created using Terraform utilzize a single policy definition in your res
   
   Ensure that only the proper section is uncommented using the Lab Section comments.
 
-  ![Terraform APIM Calc API Open API Spec](../../assets/images/tf-module-4-add-find-replace-colors-api.png)
+  ![Terraform APIM Calc API Open API Spec](../../assets/images/tf-module-4-add-conditional-starwars-api.png)
   
 - Execute a Terraform Init and Terraform Apply with these changes, this will create the transformation policy for the Star Wars API operation.
 

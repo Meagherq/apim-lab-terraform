@@ -60,7 +60,7 @@ Use the following sites:
   
   Ensure that only the proper section is uncommented using the Lab Section comments.
 
-  ![Terraform APIM Calc API JWT Validation policy](../../assets/images/tf-module-7-add-validation-policy-calc-api.png)
+  ![Terraform APIM Calc API JWT Validation policy](../../assets/images/tf-module-7-add-check-claim-exists-policy-calc-api.png)
   
 - Execute a Terraform Init and Terraform Apply with these changes, this will create the JWT validation policy to all operations within the Calculator API to check for a specific JWT signing key.
 
@@ -184,7 +184,7 @@ It may often be necessary to pass (specific) claims onto the backend API to info
   
   Ensure that only the proper section is uncommented using the Lab Section comments.
 
-  ![Terraform APIM Calc API extract policy module](../../assets/images/tf-module-7-add-extract-policy-calc-api.png)
+  ![Terraform APIM Calc API extract policy module](../../assets/images/tf-module-7-add-check-claim-exists-policy-calc-api.png)
 
 - Update the policy definition so that the code matches the image below.
 

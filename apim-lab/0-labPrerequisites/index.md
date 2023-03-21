@@ -20,4 +20,10 @@ Please check that you have the following requirements to complete the hands-on l
   - [Calculator API](http://calcapi.cloudapp.net/calcapi.json)
 - For part 8 you need to have access to a valid [Azure DevOps](https://dev.azure.com) organization.
 
+- If you are completing the APIM labs using Terraform, first follow this instructional to set up remote state.
+
+  - [Azure Terraform Remote State Documentation](https://learn.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage?tabs=azure-cli)
+
+  Additionally, you will also need tenant level admin privileges to be able to create RBAC assignments and Application Registrations.
+   
 **An API Management instance can take some time to provision.** Please follow the steps outlined in APIM Creation prior to the workshop.
