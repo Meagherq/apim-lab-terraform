@@ -9,6 +9,19 @@ resource "azuread_application" "appreg" {
   api {
     mapped_claims_enabled          = true
     requested_access_token_version = 2
+
+    dynamic "oauth2_permission_scope" {
+      for_each = var.permissions
+      content {
+        id = oauth2_permission_scope.value["id"]
+        admin_consent_description = oauth2_permission_scope.value["admin_consent_description"]
+        admin_consent_display_name = oauth2_permission_scope.value["admin_consent_display_name"]
+        user_consent_description = oauth2_permission_scope.value["user_consent_description"]
+        user_consent_display_name = oauth2_permission_scope.value["user_consent_display_name"]
+        value = oauth2_permission_scope.key
+      }
+      
+    }
   }
 
   required_resource_access {
@@ -36,7 +49,7 @@ resource "azuread_application" "appreg" {
   }
 
   dynamic "required_resource_access" {
-    for_each = var.resource_app_id == null ? {} : toset(var.resource_app_id)
+    for_each = var.resource_app_id == null ? [] : toset([var.resource_app_id])
 
     content {
         resource_app_id = var.resource_app_id
@@ -64,4 +77,10 @@ resource "azuread_application" "appreg" {
 
 resource "azuread_application_password" "password" {
   application_object_id = azuread_application.appreg.object_id
+}
+
+resource "azuread_service_principal" "sp" {
+  application_id               = azuread_application.appreg.application_id
+  app_role_assignment_required = false
+  owners                       = [data.azuread_client_config.current.object_id]
 }

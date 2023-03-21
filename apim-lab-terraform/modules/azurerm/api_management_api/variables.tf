@@ -26,7 +26,7 @@ variable description {
     default = null
 }
 variable subscription_required {
-    default = true
+    default = false
 }
 variable content_format {
     default = null
@@ -35,5 +35,8 @@ variable content_value {
     default = null
 }
 variable source_api_id {
+    default = null
+}
+variable authorization_server_name {
     default = null
 }

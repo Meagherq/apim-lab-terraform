@@ -56,7 +56,7 @@ API revisions can also be created in Terraform using the source_api_id property.
 
   ![Terraform APIM Calc API v2 rev2](../../assets/images/tf-module-5-add-calc-api-v2-rev2.png)
   
-- Execute a Terraform Plan and Terraform Apply with these changes, this will create a rev2 resource for the Calculator API v2 and its configuration.
+- Execute a Terraform Init and Terraform Apply with these changes, this will create a rev2 resource for the Calculator API v2 and its configuration.
 
 Note how new product associations are not required for revisions but are required for versions. 
 

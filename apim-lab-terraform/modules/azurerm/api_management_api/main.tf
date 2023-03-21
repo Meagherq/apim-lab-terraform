@@ -21,4 +21,12 @@ resource "azurerm_api_management_api" "api" {
         content_value = var.content_value
     }
   }
+
+  dynamic "oauth2_authorization" {
+    for_each = var.authorization_server_name == null ? [] : toset([var.authorization_server_name])
+
+    content {
+      authorization_server_name = var.authorization_server_name
+    }
+  }
 }

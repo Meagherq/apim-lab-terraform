@@ -2,29 +2,39 @@
     <inbound>
         <base />
 
-
-        <validate-jwt header-name="Authorization" failed-validation-httpcode="401" failed-validation-error-message="Unauthorized">
+        <!-- BEGIN JSON Web Tokens (JWT) - Validation -->
+        <!-- <validate-jwt header-name="Authorization" failed-validation-httpcode="401" failed-validation-error-message="Unauthorized">
             <issuer-signing-keys>
                 <key>${SigningKey}</key>
             </issuer-signing-keys>
-            <!-- JSON Web Tokens (JWT) - Check that a Claim Exists -->
-            <!-- Add required claims to policy -->
-            <!-- <required-claims>
+        </validate-jwt> -->
+        <!-- END JSON Web Tokens (JWT) - Validation -->
+
+        <!-- BEGIN JSON Web Tokens (JWT) - Check that a Claim Exists -->
+        <!-- Add required claims to policy -->
+        <!-- <validate-jwt header-name="Authorization" failed-validation-httpcode="401" failed-validation-error-message="Unauthorized">
+            <issuer-signing-keys>
+                <key>${SigningKey}</key>
+            </issuer-signing-keys>
+
+            <required-claims>
                 <claim name="admin" match="any">
                     <value>true</value>
                 </claim>
-            </required-claims> -->
-        </validate-jwt>
+            </required-claims>
+        </validate-jwt> -->
+        <!-- END JSON Web Tokens (JWT) - Check that a Claim Exists -->
 
-        <!-- Authorization Code Flow -->
-        <!-- <validate-jwt header-name="Authorization" failed-validation-httpcode="401" failed-validation-error-message="Unauthorized. Access token is missing or invalid.">
+        <!-- BEGIN JSON Web Tokens (JWT) - Authorization Code Flow -->
+        <validate-jwt header-name="Authorization" failed-validation-httpcode="401" failed-validation-error-message="Unauthorized. Access token is missing or invalid.">
             <openid-config url="https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration" />
             <audiences>
                 <audience>${Audience}</audience>
             </audiences>
-        </validate-jwt> -->
+        </validate-jwt>
+        <!-- END JSON Web Tokens (JWT) - Authorization Code Flow -->
         
-        <!-- JSON Web Tokens (JWT) - Extract Claim and Pass to Backend -->
+        <!-- BEGIN JSON Web Tokens (JWT) - Extract Claim and Pass to Backend -->
         <!-- Pass JWT token to backend as header -->
         <!-- <set-header exists-action="override" name="username">
             <value>@{
@@ -33,6 +43,7 @@
                 return jwt.Claims.GetValueOrDefault("name", "?");
             }</value>
         </set-header> -->
+        <!-- END JSON Web Tokens (JWT) - Extract Claim and Pass to Backend -->
     </inbound>
     <backend>
         <base />

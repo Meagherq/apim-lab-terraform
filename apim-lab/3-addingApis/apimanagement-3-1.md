@@ -54,7 +54,7 @@ To deploy the [*Star Wars* API](https://swapi.dev): using Terraform we will be u
 
   ![Terraform APIM Star Wars API and Operations](../../assets/images/tf-module-3-add-star-wars-api.png)
   
-- Execute a Terraform Plan and Terraform Apply with these changes, this will create the Star Wars API and its operations.
+- Execute a Terraform Init and Terraform Apply with these changes, this will create the Star Wars API and its operations.
 
 ### Access Star Wars API from Developer Portal
 

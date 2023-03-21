@@ -7,6 +7,6 @@ resource "azuread_application_oauth2_permission_scope" "scope" {
   enabled                    = true
   type                       = var.type
   user_consent_description   = var.user_consent_description
-  user_consent_display_name  = var.user_consent_description
+  user_consent_display_name  = var.user_consent_display_name
   value                      = var.value
 }

@@ -51,7 +51,7 @@ nav_order: 4
 
   ![Terraform APIM Calc API Named Value collection policy](../../assets/images/tf-module-4-add-named-value-collection-policy.png)
   
-- Execute a Terraform Plan and Terraform Apply with these changes, this will create the Named Value collection policy for the Calc API operation.
+- Execute a Terraform Init and Terraform Apply with these changes, this will create the Named Value collection policy for the Calc API operation.
 
 - Test the operation by selecting the *Starter* or *Unlimited* product scope. 
 - Examine the backend trace to find the added header with the evaluated named value:

@@ -34,7 +34,7 @@ Using the provided Terraform lab content, we will first update the root level va
 
 ![Terraform Root Variables](../../assets/images/tf-root-variables.png)
 
-When using Terraform to create an Azure API Management instance, all starter resources must be manually created. These resources are included in thie demonstration. Execute a Terraform Plan and Terraform Apply without any additional changes, this will deploy the base resources required for the first Lab Module exercise.
+When using Terraform to create an Azure API Management instance, all starter resources must be manually created. These resources are included in thie demonstration. Execute a Terraform Init and Terraform Apply without any additional changes, this will deploy the base resources required for the first Lab Module exercise.
 
 ![Terraform APIM Creation](../../assets/images/tf-apim-creation.png)
 
@@ -73,7 +73,7 @@ To make this change in Terraform, uncomment the subscription required property i
 
 ![Terraform Subscription Required](../../assets/images/tf-module-1-subscription-required.png)
 
-Execute a Terraform Plan and Terraform Apply with these changes, this will update the Echo API configuration to require a subscription.
+Execute a Terraform Init and Terraform Apply with these changes, this will update the Echo API configuration to require a subscription.
 
 Accessing the link in your browser should now show you no error message. In fact, in order to verify the 200, it's easiest to open your Developer Tools (F12), navigate to the *Network* tab, and look at *All* requests to see the 200.
 

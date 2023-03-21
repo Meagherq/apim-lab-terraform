@@ -79,7 +79,7 @@ The following policy and payload applies for both examples in this lab. **Please
 
   ![Terraform APIM Calc API send one-way policy](../../assets/images/tf-module-4-add-send-one-way-calc-api.png)
   
-- Execute a Terraform Plan and Terraform Apply with these changes, this will create the send one-way policy for the Calc API operation.
+- Execute a Terraform Init and Terraform Apply with these changes, this will create the send one-way policy for the Calc API operation.
 
 ### Send a message to Microsoft Teams channel
 

@@ -45,7 +45,7 @@ API definitions can also be imported into Terraform using an Open API specificat
 
   ![Terraform APIM Calc API Open API Spec](../../assets/images/tf-module-3-add-calc-api.png)
   
-- Execute a Terraform Plan and Terraform Apply with these changes, this will create the Star Wars API and its operations.
+- Execute a Terraform Init and Terraform Apply with these changes, this will create the Star Wars API and its operations.
 
 - Back in the Developer Portal, try out the Calculator API via the *Add two integers* GET method, then examine the response.  
 

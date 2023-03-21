@@ -194,6 +194,15 @@ We will now configure the Validate JWT policy to pre-authorize requests in API M
 </validate-jwt>
 ```
 
+### Validate-jwt policy to pre-authorize requests with AD token using Terraform
+- In the root main.tf file, uncomment the code definitions containing the Azure Application Registration and APIM authorization related resources. For this policy we will be interpolating our the Audience variable using the vars property. This value is the client id from the backend Application Registration
+  
+  Ensure that only the proper section is uncommented using the Lab Section comments.
+
+  ![Terraform APIM Calc API Authorization Code Grant flow](../../assets/images/tf-module-7-add-app-reg-oauth.png)
+
+- Execute a Terraform Init and Terraform Apply with these changes, this will create the Authorization Code Grant policy for all operations within the Calculator API to require a valid token authorized by the backend Application Registration.
+
 - Go back to the developer portal and send the api with invalid token.
 - You would observe the 401 unauthorized.
 

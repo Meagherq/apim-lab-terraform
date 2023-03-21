@@ -45,7 +45,7 @@ Policies created using Terraform utilzize a single policy definition in your res
 
   ![Terraform APIM Calc API Open API Spec](../../assets/images/tf-module-4-add-find-replace-colors-api.png)
   
-- Execute a Terraform Plan and Terraform Apply with these changes, this will create the Caching policy for the Colors API.
+- Execute a Terraform Init and Terraform Apply with these changes, this will create the Caching policy for the Colors API.
 
 ---
 
@@ -105,7 +105,7 @@ Policies created using Terraform utilzize a single policy definition in your res
 
   ![Terraform APIM Calc API Open API Spec](../../assets/images/tf-module-4-add-find-replace-colors-api.png)
   
-- Execute a Terraform Plan and Terraform Apply with these changes, this will create the transformation policy for the Star Wars API operation.
+- Execute a Terraform Init and Terraform Apply with these changes, this will create the transformation policy for the Star Wars API operation.
 
 - Test the API on the *Test* tab with *id* 1 and apply the appropriate *Starter* or *Unlimited* product scope. Examine the different responses.
 
@@ -142,7 +142,7 @@ A frequent requirement is to transform content, especially to maintain compatibi
 
   ![Terraform APIM Calc API XML to JSON policy](../../assets/images/tf-module-4-add-base-transormation-policy.png)
   
-- Execute a Terraform Plan and Terraform Apply with these changes, this will create the XML to JSON policy for the Calc API operation.
+- Execute a Terraform Init and Terraform Apply with these changes, this will create the XML to JSON policy for the Calc API operation.
 
 - Test the API and examine the response. Note that it's now JSON.
 
@@ -170,7 +170,7 @@ A frequent requirement is to remove headers, especially ones that return securit
 
   ![Terraform APIM Calc API delete response headers policy](../../assets/images/tf-module-4-add-delete-headers-calc-api.png)
   
-- Execute a Terraform Plan and Terraform Apply with these changes, this will create the Delete response headers policy for the Calc API operation.
+- Execute a Terraform Init and Terraform Apply with these changes, this will create the Delete response headers policy for the Calc API operation.
 
 - Invoke the API and examine the response, which now no longer contains the two headers. See above screenshot for how it looked prior.
 
@@ -201,7 +201,7 @@ Query string parameters and headers can be easily modified prior to sending the 
 
   ![Terraform APIM Calc API amend request policy](../../assets/images/tf-module-4-add-amend-policy.png)
   
-- Execute a Terraform Plan and Terraform Apply with these changes, this will create the Amend request policy for the Calc API operation.
+- Execute a Terraform Init and Terraform Apply with these changes, this will create the Amend request policy for the Calc API operation.
 
 - Test the call by using either the *Starter* or *Unlimited* product, click on Trace button and then inspect the result on the *Trace* tab. If Tracing is not enabled, press *Enable Tracing*.
 

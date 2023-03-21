@@ -41,7 +41,7 @@ API versions can also be created in Terraform using the source_api_id property. 
 
   ![Terraform APIM Calc API v2](../../assets/images/tf-module-5-add-calc-api-v2.png)
   
-- Execute a Terraform Plan and Terraform Apply with these changes, this will create a v2 resource for the Calculator API and its configuration.
+- Execute a Terraform Init and Terraform Apply with these changes, this will create a v2 resource for the Calculator API and its configuration.
 
 ### Test the new version
 

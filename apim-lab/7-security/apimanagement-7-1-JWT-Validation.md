@@ -55,6 +55,15 @@ Use the following sites:
   </policies>
   ```
 
+### JSON Web Tokens (JWT) - Validation with Terraform
+- In the root main.tf file, uncomment the code definition containing the delete-response-headers policy for the Calculator API. The SigningKey variable is interpolated for this policy. Fill in the value for the SigningKey variable using your 256-bit key from the earlier section.
+  
+  Ensure that only the proper section is uncommented using the Lab Section comments.
+
+  ![Terraform APIM Calc API JWT Validation policy](../../assets/images/tf-module-7-add-validation-policy-calc-api.png)
+  
+- Execute a Terraform Init and Terraform Apply with these changes, this will create the JWT validation policy to all operations within the Calculator API to check for a specific JWT signing key.
+
 - Invoke the *Divide two integers* method on the API from the *Test* tab. Observe the `401` Unauthorized error.
 
   ![APIM Request with no JWT](../../assets/images/apim-request-no-jwt.png)
@@ -97,6 +106,19 @@ Not only is it important that a JWT is valid, but, as we use it for authorizatio
       ...
   </policies>
   ```
+
+### JSON Web Tokens (JWT) - Check that a Claim exists with Terraform
+- For this exercise, no further changes are needed in the root main.tf file. Instead we will be updating the policy file to include an additional component which will add the required claim check. The value for the SigningKey variable from the earlier section is still required.
+  
+  Ensure that only the proper section is uncommented using the Lab Section comments.
+
+  ![Terraform APIM Calc API check claim exists policy module](../../assets/images/tf-module-7-add-check-claim-exists-policy-calc-api.png)
+
+- Update the policy definition so that the code matches the image below.
+
+  ![Terraform APIM Calc API check claim exists policy definition](../../assets/images/tf-module-7-update-jwt-policy-check-claim-calc-api.png)
+  
+- Execute a Terraform Init and Terraform Apply with these changes, this will create the check claim exists policy for all operations within the Calculator API to check for a specific claim.
 
 - Invoke the *Divide two integers* method with the `Authorization` header as above and observe the `200` success. We have not fundamentally changed the test scenario as we only restricted the claims to something that we already had in our payload.
 
@@ -156,6 +178,19 @@ It may often be necessary to pass (specific) claims onto the backend API to info
       ...
   </policies>
   ```
+
+### JSON Web Tokens (JWT) - Extract Claim and Pass to Backend with Terraform
+- For this exercise, no further changes are needed in the root main.tf file. Instead we will be updating the policy file to include an additional component which will add the required claim check. The value for the SigningKey variable from the earlier section is still required.
+  
+  Ensure that only the proper section is uncommented using the Lab Section comments.
+
+  ![Terraform APIM Calc API extract policy module](../../assets/images/tf-module-7-add-extract-policy-calc-api.png)
+
+- Update the policy definition so that the code matches the image below.
+
+  ![Terraform APIM Calc API extract policy definition](../../assets/images/tf-module-7-update-jwt-policy-extract-calc-api.png)
+  
+- Execute a Terraform Init and Terraform Apply with these changes, this will create the extract claim policy for all operations within the Calculator API to pass a specific claim value to the backend.
 
 - Invoke the *Divide two integers* method with the `Authorization` header once more and observe the `200` Success.
 - Use the *Trace* feature to inspect what was passed to backend. You should see the new header and the correct value from the claims.

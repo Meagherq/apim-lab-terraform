@@ -61,4 +61,4 @@ Policies can also be created using Terraform using the xml policy definition in 
 
   ![Terraform APIM Calc API Open API Spec](../../assets/images/tf-module-4-add-caching-policy-colors-api.png)
   
-- Execute a Terraform Plan and Terraform Apply with these changes, this will create the Caching policy for the Colors API.
+- Execute a Terraform Init and Terraform Apply with these changes, this will create the Caching policy for the Colors API.

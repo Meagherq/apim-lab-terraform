@@ -179,7 +179,7 @@ Once your logger is configured in API Management, you can configure your log-to-
 
 1. Click **Save** to save the updated policy configuration. As soon as it is saved the policy is active and events are logged to the designated Event Hub.
 
-### Application Insights logging with Terraform
+### Configure log-to-eventhub policies with Terraform
 
 - In the root main.tf file, uncomment the code definitions containing the EventHub and logging resources for the Echo API.
   
@@ -187,7 +187,7 @@ Once your logger is configured in API Management, you can configure your log-to-
 
   ![Terraform APIM Color API EventHub logging](../../assets/images/tf-module-6-add-app-eventhub-color-api.png)
   
-- Execute a Terraform Plan and Terraform Apply with these changes, this will create the EventHub and logging resources for the Echo API and its configuration.
+- Execute a Terraform Init and Terraform Apply with these changes, this will create the EventHub and logging resources for the Echo API and its configuration.
 
 ---
 

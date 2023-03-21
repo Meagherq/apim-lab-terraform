@@ -42,4 +42,4 @@ A product contains one or more APIs as well as a usage quota and the terms of us
 
   ![Terraform APIM Product and Groups](../../assets/images/tf-module-2-product-management.png)
   
-- Execute a Terraform Plan and Terraform Apply with these changes, this will create the Gold Tier product and two associatd groups.
+- Execute a Terraform Init and Terraform Apply with these changes, this will create the Gold Tier product and two associatd groups.

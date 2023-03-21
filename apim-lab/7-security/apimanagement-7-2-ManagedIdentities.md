@@ -67,6 +67,15 @@ Remember to click **Save**
 <rewrite-uri template="@((string)context.Variables["favoritePersonRequest"])" />
 ```
 
+### API Management, Key Vault and Managed Service Identity with Terraform
+- In the root main.tf file, uncomment the code definitions containing the Azure Key Vault and related APIM resources for the Star Wars API. For this policy we will be interpolating our the KeyVaultUri variable using the vars property. This value is the id from our Key Vault module.
+  
+  Ensure that only the proper section is uncommented using the Lab Section comments.
+
+  ![Terraform APIM Calc API Authorization Code Grant flow](../../assets/images/tf-module-7-managed-identities.png)
+
+- Execute a Terraform Init and Terraform Apply with these changes, this will create the Authorization Code Grant policy for all operations within the Calculator API to require a valid token authorized by the backend Application Registration.
+
 #### Test the operation
 
 - Test the operation (use the developer portal, Azure portal or tools like Postman and curl)

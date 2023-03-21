@@ -65,7 +65,7 @@ API definitions can also be imported into Terraform using it's Open API specific
 
   ![Terraform APIM Colors API Open API Spec](../../assets/images/tf-module-3-add-colors-api-open-api.png)
   
-- Execute a Terraform Plan and Terraform Apply with these changes, this will create the Colors API and the associated products.
+- Execute a Terraform Init and Terraform Apply with these changes, this will create the Colors API and the associated products.
 
 ### Test it in Developer Portal
 

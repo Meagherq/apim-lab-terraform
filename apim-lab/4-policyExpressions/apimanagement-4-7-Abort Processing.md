@@ -51,7 +51,7 @@ The ability to terminate a response gracefully is of importance in a number of c
 
   ![Terraform APIM Calc API abort processing policy](../../assets/images/tf-module-4-add-abort-processing-calc-api.png)
   
-- Execute a Terraform Plan and Terraform Apply with these changes, this will create the abort processing policy for the Calc API operation.
+- Execute a Terraform Init and Terraform Apply with these changes, this will create the abort processing policy for the Calc API operation.
 
   ![APIM Policy Abort Response](../../assets/images/apim-policy-abort-response.png)
 
@@ -66,4 +66,4 @@ The ability to terminate a response gracefully is of importance in a number of c
 
   ![Terraform APIM Calc API revert abort processing policy](../../assets/images/tf-module-4-add-send-one-way-calc-api.png)
   
-- Execute a Terraform Plan and Terraform Apply with these changes, this will revert the policy back to the send one-way exercise for the Calc API operation.
+- Execute a Terraform Init and Terraform Apply with these changes, this will revert the policy back to the send one-way exercise for the Calc API operation.

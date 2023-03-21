@@ -48,7 +48,7 @@ Mocking in APIM is a useful mechanism for API consumers to interact with APIs wi
 
   ![Terraform APIM Calc API Named Value collection policy](../../assets/images/tf-module-4-add-mock-reponse-policy.png)
   
-- Execute a Terraform Plan and Terraform Apply with these changes, this will create the mock responses policy for the Star Wars API operation.
+- Execute a Terraform Init and Terraform Apply with these changes, this will create the mock responses policy for the Star Wars API operation.
 
 - Invoke the API to receive a `200` success with the mocked film data.
 
