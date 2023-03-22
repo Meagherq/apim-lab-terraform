@@ -1,5 +1,5 @@
 variable "environment_prefix" {
-    default = "dev"
+    default = "lab"
 }
 variable "location" {
     default = "eastus"

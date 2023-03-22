@@ -36,7 +36,7 @@ module "apim" {
     location = module.resource_group.location
     resource_group_name = module.resource_group.name
     publisher_name = "Quinn Meagher"
-    publisher_email = "demoemail@demoqrm.com"
+    publisher_email = "quinnmeagher@microsoft.com"
 
     # scale_locations = { "EastUS": 2, "WestUS": 2 }
 }
@@ -127,7 +127,7 @@ module "apim_global_cors_policy" {
     api_management_id = module.apim.id
     policy_filename = "cors"
     vars = { origins = [module.apim.developer_portal_url, "https://colors-web.azurewebsites.net/"] }
-    # Use line below to add the StarWars API to the global CORS policies
+    # Uncomment the line below to add the StarWars API to the global CORS policies
     # vars = { origins = [module.apim.developer_portal_url, "https://colors-web.azurewebsites.net/", module.apim_starwars_api.origin]}
 }
 
@@ -585,21 +585,21 @@ module "apim_global_cors_policy" {
 # }
 # # END Lab 5 Analytics & Monitoring Section 2 Configure Log to EventHub
 
-# BEGIN Lab 6 Security Section 1 JSON Web Token
-# Section requires changes to Policy file content
-module "apim_calc_api_validate_jwt_policy" {
-    source = "../../modules/azurerm/api_management_api_policy"
+# # BEGIN Lab 6 Security Section 1 JSON Web Token
+# # Section requires changes to Policy file content
+# module "apim_calc_api_validate_jwt_policy" {
+#     source = "../../modules/azurerm/api_management_api_policy"
 
-    api_name = module.apim_calc_api.name
-    api_management_name = module.apim.name
-    resource_group_name = module.resource_group.name
-    policy_filename = "validate-jwt"
+#     api_name = module.apim_calc_api.name
+#     api_management_name = module.apim.name
+#     resource_group_name = module.resource_group.name
+#     policy_filename = "validate-jwt"
 
-    vars = { SigningKey = "123412341234123412341234", Audience = "" }
+#     vars = { SigningKey = "123412341234123412341234", Audience = "" }
 
-    # vars = { SigningKey = "123412341234123412341234", Audience = module.apim_backend_app_oauth_app_reg.app_id }
-}
-# END Lab 6 Security Section 1 JSON Web Token
+#     # vars = { SigningKey = "123412341234123412341234", Audience = module.apim_backend_app_oauth_app_reg.app_id }
+# }
+# # END Lab 6 Security Section 1 JSON Web Token
 
 # # BEGIN Lab 6 Security Section 2 Authorization Code Grant
 # resource "random_uuid" "backend_scope_id" {}
