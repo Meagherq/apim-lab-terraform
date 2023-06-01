@@ -42,11 +42,11 @@ resource "azurerm_api_management_api" "api" {
     }
   }
 
-  # provisioner "local-exec" {
-  #   when = create
-  #   command = "${path.module}/processWSDLApiOperations3.ps1 -clientId ${var.tf_client_id} -clientSecret ${var.tf_client_secret} -tenantId ${data.azuread_client_config.current.tenant_id} -subscriptionId ${var.subscription_id} -resourceGroupName ${self.resource_group_name} -apimName ${self.api_management_name} -apiId ${self.name}"
-  #   interpreter = ["PowerShell", "-Command"]
-  # }
+  provisioner "local-exec" {
+    when = create
+    command = "${path.module}/processWSDLApiOperations3.ps1 -clientId ${var.tf_client_id} -clientSecret ${var.tf_client_secret} -tenantId ${data.azuread_client_config.current.tenant_id} -subscriptionId ${var.subscription_id} -resourceGroupName ${self.resource_group_name} -apimName ${self.api_management_name} -apiId ${self.name}"
+    interpreter = ["PowerShell", "-Command"]
+  }
 }
 
 # data "external" "wsdl_operations" {
