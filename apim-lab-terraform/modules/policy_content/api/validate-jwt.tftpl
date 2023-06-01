@@ -7,12 +7,17 @@
             <issuer-signing-keys>
                 <key>${SigningKey}</key>
             </issuer-signing-keys>
+        </validate-jwt>
+        <validate-jwt header-name="Authorization" failed-validation-httpcode="401" failed-validation-error-message="Unauthorized">
+            <issuer-signing-keys>
+                <key>123412341234123412341234</key>
+            </issuer-signing-keys>
         </validate-jwt> -->
         <!-- END JSON Web Tokens (JWT) - Validation -->
 
         <!-- BEGIN JSON Web Tokens (JWT) - Check that a Claim Exists -->
         <!-- Add required claims to policy -->
-        <validate-jwt header-name="Authorization" failed-validation-httpcode="401" failed-validation-error-message="Unauthorized">
+        <!-- <validate-jwt header-name="Authorization" failed-validation-httpcode="401" failed-validation-error-message="Unauthorized">
             <issuer-signing-keys>
                 <key>${SigningKey}</key>
             </issuer-signing-keys>
@@ -22,16 +27,16 @@
                     <value>true</value>
                 </claim>
             </required-claims>
-        </validate-jwt>
+        </validate-jwt> -->
         <!-- END JSON Web Tokens (JWT) - Check that a Claim Exists -->
 
         <!-- BEGIN JSON Web Tokens (JWT) - Authorization Code Flow -->
-        <!-- <validate-jwt header-name="Authorization" failed-validation-httpcode="401" failed-validation-error-message="Unauthorized. Access token is missing or invalid.">
+        <validate-jwt header-name="Authorization" failed-validation-httpcode="401" failed-validation-error-message="Unauthorized. Access token is missing or invalid.">
             <openid-config url="https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration" />
             <audiences>
                 <audience>${Audience}</audience>
             </audiences>
-        </validate-jwt> -->
+        </validate-jwt>
         <!-- END JSON Web Tokens (JWT) - Authorization Code Flow -->
         
         <!-- BEGIN JSON Web Tokens (JWT) - Extract Claim and Pass to Backend -->

@@ -42,3 +42,5 @@ override.tf.json
 .terraformrc
 terraform.rc
 apim-lab-terraform/env/lab/.terraform.lock.hcl
+apim-lab-terraform/modules/openapi/FaWsvcInpGetGroup_v2.wsdl
+apim-lab-terraform/env/dev/.terraform.lock.hcl

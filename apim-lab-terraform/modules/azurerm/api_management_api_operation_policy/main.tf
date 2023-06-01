@@ -4,5 +4,5 @@ resource "azurerm_api_management_api_operation_policy" "policy" {
   resource_group_name = var.resource_group_name
   operation_id        = var.operation_id
 
-  xml_content       = templatefile("../../modules/policy_content/operation/${var.policy_filename}.tftpl", var.vars)
+  xml_content       = var.policy_filename == null ? var.policy_content : templatefile("../../modules/policy_content/operation/${var.policy_filename}.tftpl", var.vars)
 }

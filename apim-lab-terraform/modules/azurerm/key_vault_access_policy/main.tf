@@ -7,4 +7,5 @@ resource "azurerm_key_vault_access_policy" "policy" {
 
   key_permissions = var.key_permissions
   secret_permissions = var.secret_permissions
+  certificate_permissions = var.certificate_permissions
 }

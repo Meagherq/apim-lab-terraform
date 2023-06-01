@@ -26,6 +26,15 @@ resource "azurerm_api_management" "apim" {
     }
   }
 
+  dynamic "certificate" {
+    for_each = var.certificates
+    
+    content {
+      store_name = "CertificateAuthority"
+      encoded_certificate = certificate.value["certificate_data_base64"]
+    }
+  }
+
   identity {
     type = "SystemAssigned"
   }

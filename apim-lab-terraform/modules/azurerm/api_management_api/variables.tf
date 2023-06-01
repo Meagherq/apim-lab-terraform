@@ -40,3 +40,18 @@ variable source_api_id {
 variable authorization_server_name {
     default = null
 }
+
+variable tf_client_id {
+    default = null
+}
+
+variable tf_client_secret {
+    default = null
+}
+
+variable subscription_id {
+    default = null
+}
+variable "api_type" {
+    default = "http"
+}

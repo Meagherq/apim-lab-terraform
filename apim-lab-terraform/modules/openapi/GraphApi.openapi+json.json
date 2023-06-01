@@ -1,0 +1,41 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "GraphApi",
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "http://lab-qrm-apim.azure-api.net/graph"
+        },
+        {
+            "url": "https://lab-qrm-apim.azure-api.net/graph"
+        }
+    ],
+    "paths": {},
+    "components": {
+        "securitySchemes": {
+            "apiKeyHeader": {
+                "type": "apiKey",
+                "name": "Ocp-Apim-Subscription-Key",
+                "in": "header"
+            },
+            "apiKeyQuery": {
+                "type": "apiKey",
+                "name": "subscription-key",
+                "in": "query"
+            }
+        }
+    },
+    "security": [
+        {
+            "apiKeyHeader": []
+        },
+        {
+            "apiKeyQuery": []
+        }
+    ],
+    "x-ms-export-notes": [
+        "The exported API contains schemas that aren't of content type 'application/vnd.oai.openapi.components+json', and are hence not exported as OpenAPI components."
+    ]
+}

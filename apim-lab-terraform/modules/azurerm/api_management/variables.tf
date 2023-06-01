@@ -15,3 +15,6 @@ variable "virtual_network_type" {
 variable "subnet_id" {
     default = null
 }
+variable certificates {
+    default = {}
+}

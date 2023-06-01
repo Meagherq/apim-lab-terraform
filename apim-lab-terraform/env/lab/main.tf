@@ -38,6 +38,9 @@ module "apim" {
     publisher_name = "Quinn Meagher"
     publisher_email = "quinnmeagher@microsoft.com"
 
+    certificates = azurerm_key_vault_certificate.certs
+    #certificates = {}
+
     # scale_locations = { "EastUS": 2, "WestUS": 2 }
 }
 
@@ -58,6 +61,100 @@ module "apim_echo_api" {
     # subscription_required = true
 }
 
+module "apim_graph_api" {
+    source = "../../modules/azurerm/api_management_api"
+
+    name = "graphapitf"
+    display_name = "GraphApiTF"
+    description = "Implementing a GraphQL API."
+    resource_group_name = module.resource_group.name
+    service_url = "https://swapi-graphql.azure-api.net/graphql"
+    api_type = "http"
+    api_management_name = module.apim.name
+    content_format = "openapi+json"
+    content_value = file("../../modules/openapi/GraphApi.openapi+json.json")
+    path = "graphql"
+    protocols = ["https"]
+
+    # subscription_required = true
+}
+
+# resource "azurerm_api_management_api_schema" "graph_schema" {
+#   api_name            = module.apim_graph_api.name
+#   api_management_name = module.apim.name
+#   resource_group_name = module.resource_group.name
+#   schema_id           = "graphQLSchema"
+# #   content_type        = "application/vnd.ms-azure-apim.xsd+xml"
+#   content_type        = "application/vnd.ms-azure-apim.graphql.schema"
+#   value               = file("../../modules/schemas/schema.graphql")
+# }
+
+module "apim_wsdl_api" {
+    source = "../../modules/azurerm/api_management_api"
+
+    name = "wsdl-api"
+    display_name = "WSDL API"
+    description = "Implementing the WSDL API."
+    resource_group_name = module.resource_group.name
+    # service_url = "http://echoapi.cloudapp.net/api"
+    api_management_name = module.apim.name
+    content_format = "wsdl"
+    content_value = file("../../modules/openapi/example.wsdl")
+    path = "wsdl"
+    api_type = "http"
+    protocols = ["https"]
+
+    tf_client_id = var.tf_client_id
+    tf_client_secret = var.tf_client_secret
+    subscription_id = var.subscription_id
+
+    # subscription_required = true
+}
+
+# module "apim_wsdl_api_GetGroupByGroupId_policy2" {
+#   source = "../../modules/azurerm/api_management_api_operation_policy2"
+  
+#   policies = module.apim_wsdl_api.operations["wsdl"].result
+#   api_name            = module.apim_wsdl_api.name
+#   api_management_name = module.apim.name
+#   resource_group_name = module.resource_group.name
+#   #operation_id        = module.apim_wsdl_api.operations["wsdl"].result["OperationName"]
+
+#   # policy_filename     = "cache-lookup"
+
+# # Lab 4 Policy Expressions Section 3 Transformational Policies - Find and Replace
+#   #policy_content     = base64decode(module.apim_wsdl_api.operations["wsdl"].result[module.apim_wsdl_api.operations["wsdl"].result["OperationName"]])
+# }
+
+# module "apim_wsdl_api_GetGroupByGroupId_policy" {
+#   source = "../../modules/azurerm/api_management_api_operation_policy"
+  
+  
+#   api_name            = module.apim_wsdl_api.name
+#   api_management_name = module.apim.name
+#   resource_group_name = module.resource_group.name
+#   operation_id        = module.apim_wsdl_api.operations["wsdl"].result["OperationName"]
+
+#   # policy_filename     = "cache-lookup"
+
+# # Lab 4 Policy Expressions Section 3 Transformational Policies - Find and Replace
+#   policy_content     = base64decode(module.apim_wsdl_api.operations["wsdl"].result[module.apim_wsdl_api.operations["wsdl"].result["OperationName"]])
+# }
+
+# module "apim_wsdl_api_GetGroupByGroupKey_policy" {
+#   source = "../../modules/azurerm/api_management_api_operation_policy"
+
+#   api_name            = module.apim_wsdl_api.name
+#   api_management_name = module.apim.name
+#   resource_group_name = module.resource_group.name
+#   operation_id        = module.apim_wsdl_api.operations["wsdl"].wsdl.result["OperationName"]
+
+#   # policy_filename     = "cache-lookup"
+
+# # Lab 4 Policy Expressions Section 3 Transformational Policies - Find and Replace
+#   policy_content     = base64decode(module.apim_wsdl_api.operations["wsdl"].result[module.apim_wsdl_api.operations["wsdl"].result["OperationName"]])
+# }
+
 #Comment out for Echo API EventHub Logging policy section
 module "apim_echo_api_base_policy" {
     source = "../../modules/azurerm/api_management_api_policy"
@@ -66,6 +163,8 @@ module "apim_echo_api_base_policy" {
     api_management_name = module.apim.name
     resource_group_name = module.resource_group.name
     policy_filename = "base"
+
+    //vars = { LoggerId = "${module.apim_logger_eventhub.name}" }
 }
 
 # Starter Tier Product
@@ -130,6 +229,85 @@ module "apim_global_cors_policy" {
     # Uncomment the line below to add the StarWars API to the global CORS policies
     # vars = { origins = [module.apim.developer_portal_url, "https://colors-web.azurewebsites.net/", module.apim_starwars_api.origin]}
 }
+
+# # BEGIN Demonstration 1 - Import API
+# module "apim_conference_api" {
+#     source = "../../modules/azurerm/api_management_api"
+
+#     name = "demo-conference-api"
+#     display_name = "Demo Conference API"
+#     description = "A sample API with information related to a technical conference. The available resources include *Speakers*, *Sessions* and *Topics*. A single feedback operation is available to provide feedback on a session."
+#     resource_group_name = module.resource_group.name
+#     service_url = "https://conferenceapi.azurewebsites.net"
+#     api_management_name = module.apim.name
+#     content_format = "swagger-link-json"
+#     content_value = "https://conferenceapi.azurewebsites.net?format=json"
+#     path = "conference"
+#     protocols = ["https"]
+#     versionNumber = "v1"
+
+#     version_set_id = module.apim_conference_api_version_set.id
+
+#     # subscription_required = true
+# }
+
+# module "apim_conference_api_unlimited_product_assocation" {
+#     source = "../../modules/azurerm/api_management_product_api"
+
+#     api_name = module.apim_conference_api.name
+#     resource_group_name = module.resource_group.name
+#     api_management_name = module.apim.name
+#     product_id = module.apim_unlimited_tier_product.product_id
+# }
+# # END Demonstration 1 - Import API
+
+# # BEGIN Demonstration 4 - Revision and Revision
+# module "apim_conference_api_version_set" {
+#     source = "../../modules/azurerm/api_management_api_version_set"
+
+#     name = "conference-api-vs"
+#     resource_group_name = module.resource_group.name
+#     api_management_name = module.apim.name
+#     display_name = "ConferenceApiVersionSet"
+# }
+
+# module "apim_conference_api_v2" {
+#     source = "../../modules/azurerm/api_management_api"
+
+#     name = "demo-conference-api-v2"
+#     display_name = "Demo Conference API"
+#     description = "A sample API with information related to a technical conference. The available resources include *Speakers*, *Sessions* and *Topics*. A single feedback operation is available to provide feedback on a session."
+#     api_management_name = module.apim.name
+#     resource_group_name = module.resource_group.name
+#     service_url = "https://conferenceapi.azurewebsites.net"
+#     path = "conference"
+#     protocols = ["https"]
+#     version_set_id = module.apim_conference_api_version_set.id
+#     versionNumber = "v2"
+#     source_api_id = "${module.apim_conference_api.id};rev=1"
+
+#     # subscription_required = true
+# }
+
+# module "apim_conference_api_v2_rev2" {
+#     source = "../../modules/azurerm/api_management_api"
+
+#     name = "${module.apim_conference_api_v2.name}"
+#     api_management_name = module.apim.name
+#     resource_group_name = module.resource_group.name
+#     display_name = "Demo Conference API"
+#     description = "A sample API with information related to a technical conference. The available resources include *Speakers*, *Sessions* and *Topics*. A single feedback operation is available to provide feedback on a session."
+#     service_url = "https://conferenceapi.azurewebsites.net"
+#     path = "conference"
+#     protocols = ["https"]
+#     version_set_id = module.apim_conference_api_version_set.id
+#     versionNumber = "v2"
+#     revision = "2"
+#     source_api_id = "${module.apim_conference_api_v2.id};rev=1"
+
+#     # subscription_required = true
+# }
+# # END Demonstration 4 - Version and Revision
 
 # # BEGIN Lab 2 Developer Portal: Section 3 Product Management 
 # # Gold Tier Product
@@ -197,7 +375,7 @@ module "apim_global_cors_policy" {
 #     api_name = module.apim_starwars_api.name
 #     resource_group_name = module.resource_group.name
 #     api_management_name = module.apim.name
-#     product_id = "Starter"
+#     product_id = module.apim_starter_tier_product.product_id
 # }
 
 # module "apim_starwars_api_unlimited_product_assocation" {
@@ -206,7 +384,7 @@ module "apim_global_cors_policy" {
 #     api_name = module.apim_starwars_api.name
 #     resource_group_name = module.resource_group.name
 #     api_management_name = module.apim.name
-#     product_id = "Unlimited"
+#     product_id = module.apim_unlimited_tier_product.product_id
 # }
 
 # module "apim_starwars_api_getpeople" {
@@ -266,8 +444,10 @@ module "apim_global_cors_policy" {
 #     content_format = "swagger-link-json"
 #     content_value = "http://calcapi.cloudapp.net/calcapi.json"
 
+#     subscription_required = true
+
 #     # Uncomment for Lab 7 Security Oauth2 - Authorization Code Grant
-#     # authorization_server_name = module.apim_authorization_server.name
+#     authorization_server_name = module.apim_authorization_server.name
 # }
 # # END Lab 3 Adding APIs: Section 2 Import API using OpenAPI
 
@@ -331,10 +511,10 @@ module "apim_global_cors_policy" {
 #   resource_group_name = module.resource_group.name
 #   operation_id        = "getrandomcolor"
 
-#   policy_filename     = "cache-lookup"
+#   # policy_filename     = "cache-lookup"
 
 # # Lab 4 Policy Expressions Section 3 Transformational Policies - Find and Replace
-#   # policy_filename     = "transform-find-and-replace"
+#   policy_filename     = "transform-find-and-replace"
 # }
 # # END Lab 4 Policy Expressions Section 2 Caching Policy
 
@@ -358,10 +538,10 @@ module "apim_global_cors_policy" {
 #   api_name            = module.apim_calc_api.name
 #   api_management_name = module.apim.name
 #   resource_group_name = module.resource_group.name
-#   operation_id        = "64151e0b46346112109e7b52"
+#   operation_id        = "641b50a1217d2017f01f59c4"
   
 #   # Lab 4 Policy Expressions Section 3 Transformational Policies - XML to JSON
-#   policy_filename     = "xml-to-json"
+#   # policy_filename     = "xml-to-json"
   
 #   # Lab 4 Policy Expressions Section 3 Transformational Policies - Delete Response Headers
 #   # policy_filename     = "delete-response-headers"
@@ -373,11 +553,28 @@ module "apim_global_cors_policy" {
 #   # policy_filename     = "named-value-collection"
   
 #   # Lab 4 Policy Expressions Section 4 Send One Way Policy - Send One Way Request Setup
-#   # policy_filename     = "send-one-way-request"
-#   # vars = { webhook_url = "https://webhook.site/0e3f748d-0485-455b-8350-0dbc1b14f5a8" }
+#   policy_filename     = "send-one-way-request"
+#   vars = { webhook_url = "https://webhook.site/fe0ae744-8528-4864-805a-f59c6ab1502b" }
   
-#   # Lab 4 Policy Expressions Section 4 Abort Porcessing Policy - Abort Processing
+#   # Lab 4 Policy Expressions Section 4 Abort Processing Policy - Abort Processing
 #   # policy_filename     = "abort-processing"
+# }
+# module "apim_calc_api_starter_product_assocation" {
+#     source = "../../modules/azurerm/api_management_product_api"
+
+#     api_name = module.apim_calc_api.name
+#     resource_group_name = module.resource_group.name
+#     api_management_name = module.apim.name
+#     product_id = "Starter"
+# }
+
+# module "apim_calc_api_unlimited_product_assocation" {
+#     source = "../../modules/azurerm/api_management_product_api"
+
+#     api_name = module.apim_calc_api.name
+#     resource_group_name = module.resource_group.name
+#     api_management_name = module.apim.name
+#     product_id = "Unlimited"
 # }
 # # END Lab 4 Policy Expressions Section 3 Transformational Policies - Continued
 
@@ -405,7 +602,11 @@ module "apim_global_cors_policy" {
 #     method = "GET"
 #     url_template = "/film"
 #     description = "Gets a film"
+
 #     status_code = 200
+
+#     # mocked_responses = { "200": { "name": "response", "description": "Mock", "value":  "{ \"count\": 1, \"films\": [{ \"title\": \"A New Hope\", \"release-date\": \"05/25/1977\" }] }"}
+#     # }
 # }
 
 # module "apim_starwars_api_getfilm_policy" {
@@ -418,7 +619,7 @@ module "apim_global_cors_policy" {
 
 #   policy_filename     = "mock-response"
 # }
-# # END Lab 4 Policy Expressions Section 4 Mock Policies
+# # END Lab 3 Policy Expressions Section 4 Mock Policies
 
 # # BEGIN Lab 4 Versioning & Revisions Section 1 Versions
 # module "apim_starwars_api_v2" {
@@ -521,11 +722,12 @@ module "apim_global_cors_policy" {
 #     api_management_name = module.apim.name
 #     api_name            = module.apim_colors_api.name
 #     api_management_logger_id = module.apim_logger_application_insights.id
-#     verbosity = "verbose"
+#     verbosity = "information"
 #     http_correlation_protocol = "Legacy"
 #     sampling_percentage = "100"
 # }
 # # END Lab 5 Analytics & Monitoring Section 2 Application Insights
+
 
 # # BEGIN Lab 5 Analytics & Monitoring Section 2 Configure Log to EventHub
 # module "apim_eventhub_namespace" {
@@ -573,16 +775,16 @@ module "apim_global_cors_policy" {
 
 # # Uncomment the base Echo API policy that was created during the initial APIM creation. Due to Terraform's internal dependency tree this can be two apply operations. Alternatively, update the policy_filename and vars in the Echo API policy created in the first module. 
 # # Updating the earlier module will only take a single apply.
-# module "apim_echo_api_log_to_eventhub_policy" {
-#     source = "../../modules/azurerm/api_management_api_policy"
+# # module "apim_echo_api_log_to_eventhub_policy" {
+# #     source = "../../modules/azurerm/api_management_api_policy"
 
-#     api_name = module.apim_echo_api.name
-#     api_management_name = module.apim.name
-#     resource_group_name = module.resource_group.name
-#     policy_filename = "log-to-eventhub"
+# #     api_name = module.apim_echo_api.name
+# #     api_management_name = module.apim.name
+# #     resource_group_name = module.resource_group.name
+# #     policy_filename = "log-to-eventhub"
 
-#     vars = { LoggerId = "${module.apim_logger_eventhub.name}" }
-# }
+# #     vars = { LoggerId = "${module.apim_logger_eventhub.name}" }
+# # }
 # # END Lab 5 Analytics & Monitoring Section 2 Configure Log to EventHub
 
 # # BEGIN Lab 6 Security Section 1 JSON Web Token
@@ -595,9 +797,9 @@ module "apim_global_cors_policy" {
 #     resource_group_name = module.resource_group.name
 #     policy_filename = "validate-jwt"
 
-#     vars = { SigningKey = "123412341234123412341234", Audience = "" }
+#     # vars = { SigningKey = "123412341234123412341234", Audience = "" }
 
-#     # vars = { SigningKey = "123412341234123412341234", Audience = module.apim_backend_app_oauth_app_reg.app_id }
+#     vars = { SigningKey = "123412341234123412341234", Audience = module.apim_backend_app_oauth_app_reg.app_id }
 # }
 # # END Lab 6 Security Section 1 JSON Web Token
 
@@ -607,8 +809,8 @@ module "apim_global_cors_policy" {
 # module "apim_backend_app_oauth_app_reg" {
 #     source = "../../modules/azuread/application_registration"
 
-#     display_name = "backend-apim-oauth-${var.initials}"
-#     app_identifier = "backendapimoauth${var.initials}"
+#     display_name = "backend-oauth-${var.initials}"
+#     app_identifier = "backendoauth${var.initials}"
 
 #     permissions = { "files.Read": { 
 #           "admin_consent_description" : "Allow the application to access example on behalf of the signed-in user."
@@ -622,8 +824,8 @@ module "apim_global_cors_policy" {
 # module "apim_client_app_oauth_app_reg" {
 #     source = "../../modules/azuread/application_registration"
 
-#     display_name = "client-app-oauth-${var.initials}"
-#     app_identifier = "clientappmoauth${var.initials}"
+#     display_name = "client-oauth-${var.initials}"
+#     app_identifier = "clientoauth${var.initials}"
 #     resource_app_id = module.apim_backend_app_oauth_app_reg.app_id
 #     permission_id = random_uuid.backend_scope_id.result
 
@@ -647,13 +849,14 @@ module "apim_global_cors_policy" {
 # # END Lab 6 Security Section 2 Authorization Code Grant
 
 # # BEGIN Lab 6 Security Section 3 Managed Identities
-# module "apim_key_vault" {
-#     source = "../../modules/azurerm/key_vault"
 
-#     name = "${var.environment_prefix}-kv-${var.initials}"
-#     location = module.resource_group.location
-#     resource_group_name = module.resource_group.name 
-# }
+module "apim_key_vault" {
+    source = "../../modules/azurerm/key_vault"
+
+    name = "${var.environment_prefix}-kv-${var.initials}"
+    location = module.resource_group.location
+    resource_group_name = module.resource_group.name 
+}
 
 # module "apim_key_vault_secret_favoritePerson" {
 #     source = "../../modules/azurerm/key_vault_secret"
@@ -663,15 +866,170 @@ module "apim_global_cors_policy" {
 #     key_vault_id = module.apim_key_vault.id 
 # }
 
-# module "apim_key_vault_access_policy" {
-#     source = "../../modules/azurerm/key_vault_access_policy"
+resource "azurerm_key_vault_certificate" "certs" {
+  for_each = toset(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"])
 
-#     key_vault_id = module.apim_key_vault.id
-#     object_id = module.apim.principal_identity
+  name         = "generated-cert${each.value}"
+  key_vault_id = module.apim_key_vault.id
 
-#     key_permissions = [ "Get" ]
-#     secret_permissions = [ "Get" ]
-# }
+  certificate_policy {
+    issuer_parameters {
+      name = "Self"
+    }
+
+    key_properties {
+      exportable = true
+      key_size   = 2048
+      key_type   = "RSA"
+      reuse_key  = true
+    }
+
+    lifetime_action {
+      action {
+        action_type = "AutoRenew"
+      }
+
+      trigger {
+        days_before_expiry = 30
+      }
+    }
+
+    secret_properties {
+      content_type = "application/x-pkcs12"
+    }
+
+    x509_certificate_properties {
+      # Server Authentication = 1.3.6.1.5.5.7.3.1
+      # Client Authentication = 1.3.6.1.5.5.7.3.2
+      extended_key_usage = ["1.3.6.1.5.5.7.3.1"]
+
+      key_usage = [
+        "cRLSign",
+        "dataEncipherment",
+        "digitalSignature",
+        "keyAgreement",
+        "keyCertSign",
+        "keyEncipherment",
+      ]
+
+      subject_alternative_names {
+        dns_names = ["internal.contoso.com", "domain.hello.world"]
+      }
+
+      subject            = "CN=hello-world"
+      validity_in_months = 12
+    }
+  }
+}
+
+resource "azurerm_key_vault_certificate" "cert11" {
+
+  name         = "generated-cert14"
+  key_vault_id = module.apim_key_vault.id
+
+  certificate_policy {
+    issuer_parameters {
+      name = "Self"
+    }
+
+    key_properties {
+      exportable = true
+      key_size   = 2048
+      key_type   = "RSA"
+      reuse_key  = true
+    }
+
+    lifetime_action {
+      action {
+        action_type = "AutoRenew"
+      }
+
+      trigger {
+        days_before_expiry = 30
+      }
+    }
+
+    secret_properties {
+      content_type = "application/x-pkcs12"
+    }
+
+    x509_certificate_properties {
+      # Server Authentication = 1.3.6.1.5.5.7.3.1
+      # Client Authentication = 1.3.6.1.5.5.7.3.2
+      extended_key_usage = ["1.3.6.1.5.5.7.3.1"]
+
+      key_usage = [
+        "cRLSign",
+        "dataEncipherment",
+        "digitalSignature",
+        "keyAgreement",
+        "keyCertSign",
+        "keyEncipherment",
+      ]
+
+      subject_alternative_names {
+        dns_names = ["internal.contoso.com", "domain.hello.world"]
+      }
+
+      subject            = "CN=hello-world"
+      validity_in_months = 12
+    }
+  }
+}
+
+
+module "apim_key_vault_access_policy" {
+    source = "../../modules/azurerm/key_vault_access_policy"
+
+    key_vault_id = module.apim_key_vault.id
+    object_id = module.apim.principal_identity
+
+    certificate_permissions = [
+      "Create",
+      "Delete",
+      "DeleteIssuers",
+      "Get",
+      "GetIssuers",
+      "Import",
+      "List",
+      "ListIssuers",
+      "ManageContacts",
+      "ManageIssuers",
+      "Purge",
+      "SetIssuers",
+      "Update",
+    ]
+
+    key_permissions = [
+      "Backup",
+      "Create",
+      "Decrypt",
+      "Delete",
+      "Encrypt",
+      "Get",
+      "Import",
+      "List",
+      "Purge",
+      "Recover",
+      "Restore",
+      "Sign",
+      "UnwrapKey",
+      "Update",
+      "Verify",
+      "WrapKey",
+    ]
+
+    secret_permissions = [
+      "Backup",
+      "Delete",
+      "Get",
+      "List",
+      "Purge",
+      "Recover",
+      "Restore",
+      "Set",
+    ]
+}
 
 # module "apim_starwars_api_getfavoriteperson" {
 #     source = "../../modules/azurerm/api_management_api_operation"

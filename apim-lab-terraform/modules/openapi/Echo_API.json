@@ -6,7 +6,7 @@
     },
     "servers": [
         {
-            "url": "https://dev-qrm-apim.azure-api.net/echo"
+            "url": "https://lab-qrm-apim.azure-api.net/echo"
         }
     ],
     "paths": {

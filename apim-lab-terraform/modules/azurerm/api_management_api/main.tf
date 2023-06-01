@@ -1,3 +1,5 @@
+data "azuread_client_config" "current" {}
+
 resource "azurerm_api_management_api" "api" {
   name                  = var.name
   resource_group_name   = var.resource_group_name
@@ -7,6 +9,7 @@ resource "azurerm_api_management_api" "api" {
   revision              = var.revision
   display_name          = var.display_name
   path                  = var.path
+  api_type              = var.api_type
   service_url           = var.service_url
   protocols             = var.protocols
   description           = var.description
@@ -17,8 +20,17 @@ resource "azurerm_api_management_api" "api" {
     for_each = var.content_value == null ? [] : toset([var.content_value])
 
     content {
-        content_format = var.content_format
-        content_value = var.content_value
+      content_format = var.content_format
+      content_value  = var.content_value
+
+      dynamic "wsdl_selector" {
+        for_each = var.content_format == "wsdl" ? toset([var.content_format]) : []
+
+        content {
+          service_name = "ServiceName"
+          endpoint_name  = "EndpointName"
+        }
+      }
     }
   }
 
@@ -29,4 +41,34 @@ resource "azurerm_api_management_api" "api" {
       authorization_server_name = var.authorization_server_name
     }
   }
+
+  # provisioner "local-exec" {
+  #   when = create
+  #   command = "${path.module}/processWSDLApiOperations3.ps1 -clientId ${var.tf_client_id} -clientSecret ${var.tf_client_secret} -tenantId ${data.azuread_client_config.current.tenant_id} -subscriptionId ${var.subscription_id} -resourceGroupName ${self.resource_group_name} -apimName ${self.api_management_name} -apiId ${self.name}"
+  #   interpreter = ["PowerShell", "-Command"]
+  # }
 }
+
+# data "external" "wsdl_operations" {
+#   for_each = var.content_format == "wsdl" ? toset([var.content_format]) : []
+
+#   program = [
+#     "PowerShell",
+#     "${path.module}/processWSDLApiOperations.ps1",
+#   ]
+
+#   query = {
+#     clientId = var.tf_client_id
+#     clientSecret = var.tf_client_secret
+#     tenantId = data.azuread_client_config.current.tenant_id
+#     subscriptionId = var.subscription_id
+#     resourceGroupName = azurerm_api_management_api.api.resource_group_name
+#     apimName = azurerm_api_management_api.api.api_management_name
+#     apiId = azurerm_api_management_api.api.name
+#   }
+
+#   depends_on = [ azurerm_api_management_api.api ]
+# }
+
+
+

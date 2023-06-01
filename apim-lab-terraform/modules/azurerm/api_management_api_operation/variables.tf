@@ -10,3 +10,6 @@ variable status_code {}
 variable template_parameters {
     default = {}
 }
+variable mocked_responses {
+    default = {}
+}

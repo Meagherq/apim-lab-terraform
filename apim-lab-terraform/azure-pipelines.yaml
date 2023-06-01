@@ -31,14 +31,11 @@ stages:
     - job: Deploy
       displayName:  Lab Deploy
       steps:
-      - task: CopyFiles@2
-        displayName: 'Copy Files'
-        inputs:
-          SourceFolder: '$(Pipeline.Workspace)/$(initials)-apim-lab-terraform/drop'
-          TargetFolder: '$(System.DefaultWorkingDirectory)'
+      - download: current
+        artifact: drop
       - script: |
-          cd $(WorkingDirectory)
-          printf 'terraform {  \nbackend "azurerm" {  \nstorage_account_name="lab$(initials)prereqsa" \ncontainer_name="tfstate" \nkey="lab.terraform.tfstate" \nresource_group_name="lab-$(intiails)-prereq-rg" \n}\n}' >> backend.tf
+          cd $(Pipeline.Workspace)/$(initials)-apim-lab-terraform/env/lab
+          printf 'terraform {  \nbackend "azurerm" {  \nstorage_account_name="lab$(initials)prereqsa" \ncontainer_name="tfstate" \nkey="lab.terraform.tfstate" \nresource_group_name="lab-$(initials)-prereq-rg" \n}\n}' >> backend.tf
         displayName: 'Setup Backend Config'
       - task: Docker@1
         displayName: 'Terraform Init'
@@ -86,10 +83,8 @@ stages:
       dependsOn: ManualApproval
       displayName:  Lab Deploy 
       steps: 
-      - download: current
-        artifact: drop
       - task: Docker@1
-        displayName: 'Terraform Plan'
+        displayName: 'Terraform Apply'
         inputs:
           command: 'Run an image'
           imageName: 'hashicorp/terraform:1.3.8'

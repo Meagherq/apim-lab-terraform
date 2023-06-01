@@ -1,3 +1,7 @@
+locals {
+  final_log_category_types = setsubtract(data.azurerm_monitor_diagnostic_categories.categories.log_category_types, var.excluded_category_types)
+}
+
 data "azurerm_monitor_diagnostic_categories" "categories" {
   resource_id = var.resource_id
 }
@@ -12,7 +16,7 @@ resource "azurerm_monitor_diagnostic_setting" "setting" {
 
 
   dynamic "enabled_log" {
-    for_each = data.azurerm_monitor_diagnostic_categories.categories.log_category_types
+    for_each = local.final_log_category_types
 
     content {
       category = enabled_log.value

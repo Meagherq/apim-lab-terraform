@@ -3,5 +3,5 @@ resource "azurerm_api_management_api_version_set" "set" {
   resource_group_name = var.resource_group_name
   api_management_name = var.api_management_name
   display_name        = var.display_name
-  versioning_scheme   = "Segment"
+  versioning_scheme   = var.versioning_scheme
 }

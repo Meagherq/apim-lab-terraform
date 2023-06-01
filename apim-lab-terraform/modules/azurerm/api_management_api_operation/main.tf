@@ -21,4 +21,22 @@ resource "azurerm_api_management_api_operation" "op" {
   response {
     status_code = var.status_code
   }
+
+  dynamic "response" {
+    for_each = var.mocked_responses
+
+    content {
+      status_code = response.key
+
+      description = response.value["description"]
+      representation {
+        content_type = "application/json"
+
+        example {
+          name = response.value["name"]
+          value = response.value["value"]
+        }
+      }
+    }
+  }
 }
