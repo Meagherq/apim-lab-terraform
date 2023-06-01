@@ -1,23 +1,12 @@
 
 
-$clientId = "48aff9ec-7d2d-4189-8f21-80f110dad523"
-$clientSecret = "n6u8Q~-LqCwtOv1T16ugQT~OBU2U6VMy6_3c.b2R"
-$tenantId = "e5ff440d-0854-4245-bcba-baa4251ffcdd"
-$subscriptionId = "a6478d69-288c-48d5-a5dd-0ec146abe20e"
-$resourceGroupName = "lab-qrm-rg"
-$apimName = "lab-qrm-apim"
-$apiId = "wsdl-api"
-# @{"GetGroup_v2_GroupId"="64531e4c46346119381b323a"}
-# $jsonpayload = [Console]::In.ReadLine()
-# $json = ($jsonpayload | ConvertFrom-Json -AsHashtable)
-
-# $clientId = $json.clientId
-# $clientSecret = $json.clientSecret
-# $tenantId = $json.tenantId
-# $subscriptionId = $json.subscriptionId
-# $resourceGroupName = $json.resourceGroupName
-# $apimName = $json.apimName
-# $apiId = $json.apiId
+$clientId = ""
+$clientSecret = ""
+$tenantId = ""
+$subscriptionId = ""
+$resourceGroupName = ""
+$apimName = ""
+$apiId = ""
 
 $user = $clientId
 $password = ConvertTo-SecureString -String $clientSecret -AsPlainText -Force
@@ -46,7 +35,7 @@ foreach ($op in $operations)
     $node.Node.InnerText = $jsonnode
     Set-AzApiManagementPolicy -Context $apimContext -ApiId $apiId -OperationId $op.OperationId -Policy $policy.OuterXml.ToString()
 
-
+    # Optional Policy definition output for Terraform
     #$base64Policy = [Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes($policy))
     #      $policyOutput = @{
     #    OperationId = $op.OperationId

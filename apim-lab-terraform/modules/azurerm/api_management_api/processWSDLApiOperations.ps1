@@ -35,6 +35,8 @@ foreach ($op in $operations)
     }
     $node.Node.InnerText = $jsonnode
     $updatedPolicy = Set-AzApiManagementPolicy -Context $apimContext -ApiId $apiId -OperationId $op.OperationId -Policy $policy.OuterXml.ToString()
+
+    # Optional Policy definition output for Terraform
     #$base64Policy = [Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes($policy))
     #      $policyOutput = @{
     #    OperationId = $op.OperationId
