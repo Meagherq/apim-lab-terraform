@@ -1,0 +1,22 @@
+<policies>
+    <inbound>
+        <base />
+        <!-- BEGIN JSON Web Tokens (JWT) - Authorization Code Flow -->
+        <validate-jwt header-name="Authorization" failed-validation-httpcode="401" failed-validation-error-message="Unauthorized. Access token is missing or invalid.">
+            <openid-config url="https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration" />
+            <audiences>
+                <audience>${Audience}</audience>
+            </audiences>
+        </validate-jwt>
+        <!-- END JSON Web Tokens (JWT) - Authorization Code Flow -->
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

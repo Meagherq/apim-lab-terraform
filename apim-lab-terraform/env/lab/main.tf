@@ -44,40 +44,114 @@ module "apim" {
     # scale_locations = { "EastUS": 2, "WestUS": 2 }
 }
 
-module "apim_echo_api" {
-    source = "../../modules/azurerm/api_management_api"
+# module "apim_echo_api" {
+#     source = "../../modules/azurerm/api_management_api"
 
-    name = "echo-api"
-    display_name = "Echo API"
-    description = "Implementing the Echo API."
-    resource_group_name = module.resource_group.name
-    service_url = "http://echoapi.cloudapp.net/api"
-    api_management_name = module.apim.name
-    content_format = "openapi+json"
-    content_value = file("../../modules/openapi/Echo_API.json")
-    path = "echo"
-    protocols = ["https"]
+#     name = "echo-api"
+#     display_name = "Echo API1"
+#     description = "Implementing the Echo API."
+#     resource_group_name = module.resource_group.name
+#     service_url = "http://echoapi.cloudapp.net/api"
+#     api_management_name = module.apim.name
+#     content_format = "openapi+json"
+#     content_value = file("../../modules/openapi/Echo_API.json")
+#     path = "echo"
+#     protocols = ["https"]
 
-    # subscription_required = true
-}
+#     # subscription_required = true
+# }
 
-module "apim_graph_api" {
-    source = "../../modules/azurerm/api_management_api"
+# module "apim_echo_api2" {
+#     source = "../../modules/azurerm/api_management_api"
 
-    name = "graphapitf"
-    display_name = "GraphApiTF"
-    description = "Implementing a GraphQL API."
-    resource_group_name = module.resource_group.name
-    service_url = "https://swapi-graphql.azure-api.net/graphql"
-    api_type = "http"
-    api_management_name = module.apim.name
-    content_format = "openapi+json"
-    content_value = file("../../modules/openapi/GraphApi.openapi+json.json")
-    path = "graphql"
-    protocols = ["https"]
+#     name = "echo-api2"
+#     display_name = "Echo API2"
+#     description = "Implementing the Echo API."
+#     resource_group_name = module.resource_group.name
+#     service_url = "http://echoapi.cloudapp.net/api"
+#     api_management_name = module.apim.name
+#     content_format = "openapi+json"
+#     content_value = file("../../modules/openapi/Echo_API.json")
+#     path = "echo2"
+#     protocols = ["https"]
 
-    # subscription_required = true
-}
+#     # subscription_required = true
+# }
+
+# module "apim_echo_api3" {
+#     source = "../../modules/azurerm/api_management_api"
+
+#     name = "echo-api3"
+#     display_name = "Echo API3"
+#     description = "Implementing the Echo API."
+#     resource_group_name = module.resource_group.name
+#     service_url = "http://echoapi.cloudapp.net/api"
+#     api_management_name = module.apim.name
+#     content_format = "openapi+json"
+#     content_value = file("../../modules/openapi/Echo_API.json")
+#     path = "echo3"
+#     protocols = ["https"]
+
+#     # subscription_required = true
+# }
+
+# module "apim_echo_api_base_policy" {
+#     source = "../../modules/azurerm/api_management_api_policy"
+
+#     api_name = module.apim_echo_api.name
+#     api_management_name = module.apim.name
+#     resource_group_name = module.resource_group.name
+#     policy_filename = "validate-aud"
+
+#     vars = { Audience = "api://b4a9b7a3-7a43-4416-aa28-46cc52a3f938" }
+# }
+
+# module "apim_echo_api2_base_policy" {
+#     source = "../../modules/azurerm/api_management_api_policy"
+
+#     api_name = module.apim_echo_api2.name
+#     api_management_name = module.apim.name
+#     resource_group_name = module.resource_group.name
+#     policy_filename = "validate-aud"
+
+#     vars = { Audience = "api://752f9860-8f10-4bb9-a705-0f219e991b6e" }
+# }
+
+# module "apim_echo_api3_base_policy" {
+#     source = "../../modules/azurerm/api_management_api_policy"
+
+#     api_name = module.apim_echo_api3.name
+#     api_management_name = module.apim.name
+#     resource_group_name = module.resource_group.name
+#     policy_filename = "validate-aud"
+
+#     vars = { Audience = "api://e6be97da-ddf6-4514-89f7-a6f382d65d71" }
+# }
+
+
+
+
+
+
+
+
+# module "apim_graph_api" {
+#     source = "../../modules/azurerm/api_management_api"
+
+#     name = "graphapitf"
+#     display_name = "GraphApiTF"
+#     description = "Implementing a GraphQL API."
+#     resource_group_name = module.resource_group.name
+#     service_url = "https://swapi-graphql.azure-api.net/graphql"
+#     api_type = "http"
+#     api_management_name = module.apim.name
+#     content_format = "openapi+json"
+#     content_value = file("../../modules/openapi/GraphApi.openapi+json.json")
+#     path = "graphql"
+#     protocols = ["https"]
+
+#     # subscription_required = true
+# }
 
 # resource "azurerm_api_management_api_schema" "graph_schema" {
 #   api_name            = module.apim_graph_api.name
@@ -99,7 +173,7 @@ module "apim_wsdl_api" {
     # service_url = "http://echoapi.cloudapp.net/api"
     api_management_name = module.apim.name
     content_format = "wsdl"
-    content_value = file("../../modules/openapi/example.wsdl")
+    content_value = file("../../modules/openapi/FaWsvcInpGetGroup_v2.wsdl")
     path = "wsdl"
     api_type = "http"
     protocols = ["https"]
@@ -155,17 +229,17 @@ module "apim_wsdl_api" {
 #   policy_content     = base64decode(module.apim_wsdl_api.operations["wsdl"].result[module.apim_wsdl_api.operations["wsdl"].result["OperationName"]])
 # }
 
-#Comment out for Echo API EventHub Logging policy section
-module "apim_echo_api_base_policy" {
-    source = "../../modules/azurerm/api_management_api_policy"
+# #Comment out for Echo API EventHub Logging policy section
+# module "apim_echo_api_base_policy" {
+#     source = "../../modules/azurerm/api_management_api_policy"
 
-    api_name = module.apim_echo_api.name
-    api_management_name = module.apim.name
-    resource_group_name = module.resource_group.name
-    policy_filename = "base"
+#     api_name = module.apim_echo_api.name
+#     api_management_name = module.apim.name
+#     resource_group_name = module.resource_group.name
+#     policy_filename = "base"
 
-    //vars = { LoggerId = "${module.apim_logger_eventhub.name}" }
-}
+#     //vars = { LoggerId = "${module.apim_logger_eventhub.name}" }
+# }
 
 # Starter Tier Product
 module "apim_starter_tier_product" {
@@ -202,23 +276,23 @@ module "apim_starter_tier_product_policy" {
     policy_filename = "starter"
 }
 
-module "apim_echo_api_starter_product_assocation" {
-    source = "../../modules/azurerm/api_management_product_api"
+# module "apim_echo_api_starter_product_assocation" {
+#     source = "../../modules/azurerm/api_management_product_api"
 
-    api_name = module.apim_echo_api.name
-    resource_group_name = module.resource_group.name
-    api_management_name = module.apim.name
-    product_id = module.apim_starter_tier_product.product_id
-}
+#     api_name = module.apim_echo_api.name
+#     resource_group_name = module.resource_group.name
+#     api_management_name = module.apim.name
+#     product_id = module.apim_starter_tier_product.product_id
+# }
 
-module "apim_echo_api_unlimited_product_assocation" {
-    source = "../../modules/azurerm/api_management_product_api"
+# module "apim_echo_api_unlimited_product_assocation" {
+#     source = "../../modules/azurerm/api_management_product_api"
 
-    api_name = module.apim_echo_api.name
-    resource_group_name = module.resource_group.name
-    api_management_name = module.apim.name
-    product_id = module.apim_unlimited_tier_product.product_id
-}
+#     api_name = module.apim_echo_api.name
+#     resource_group_name = module.resource_group.name
+#     api_management_name = module.apim.name
+#     product_id = module.apim_unlimited_tier_product.product_id
+# }
 
 module "apim_global_cors_policy" {
     source = "../../modules/azurerm/api_management_policy"
